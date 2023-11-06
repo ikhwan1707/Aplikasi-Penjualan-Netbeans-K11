@@ -328,14 +328,14 @@
                       <Table columnCount="10" rowCount="10">
                         <Column editable="true" title="Title 1" type="java.lang.Object"/>
                         <Column editable="true" title="Title 2" type="java.lang.Object"/>
-                        <Column editable="true" title="Title 3" type="java.lang.Object"/>
-                        <Column editable="true" title="Title 4" type="java.lang.Object"/>
-                        <Column editable="true" title="Title 5" type="java.lang.Object"/>
-                        <Column editable="true" title="Title 6" type="java.lang.Object"/>
-                        <Column editable="true" title="Title 7" type="java.lang.Object"/>
-                        <Column editable="true" title="Title 8" type="java.lang.Object"/>
-                        <Column editable="true" title="Title 9" type="java.lang.Object"/>
-                        <Column editable="true" title="Title 10" type="java.lang.Object"/>
+                        <Column editable="true" title="Title 3" type="java.lang.String"/>
+                        <Column editable="true" title="Title 4" type="java.lang.String"/>
+                        <Column editable="true" title="Title 5" type="java.lang.String"/>
+                        <Column editable="true" title="Title 6" type="java.lang.String"/>
+                        <Column editable="true" title="Title 7" type="java.lang.String"/>
+                        <Column editable="true" title="Title 8" type="java.lang.String"/>
+                        <Column editable="true" title="Title 9" type="java.lang.String"/>
+                        <Column editable="true" title="Title 10" type="java.lang.String"/>
                       </Table>
                     </Property>
                   </Properties>

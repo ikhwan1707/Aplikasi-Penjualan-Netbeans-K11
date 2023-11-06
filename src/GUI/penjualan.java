@@ -1,17 +1,19 @@
 package GUI;
+
 import penjualan.koneksi;
 import java.sql.*;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+
 public class penjualan extends javax.swing.JFrame {
 
     private DefaultTableModel model;
+
     public penjualan() {
         initComponents();
         loadData();
         TampilBarang();
         TampilPetugas();
-        
         
     }
 
@@ -172,7 +174,15 @@ public class penjualan extends javax.swing.JFrame {
             new String [] {
                 "Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8", "Title 9", "Title 10"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Object.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
         tblhasil.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblhasilMouseClicked(evt);
@@ -262,57 +272,57 @@ public class penjualan extends javax.swing.JFrame {
 
     private void cmbpetugasItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbpetugasItemStateChanged
         try {
-    String sql = "SELECT * FROM tblpetugas WHERE IDPetugas='" + cmbpetugas.getSelectedItem().toString() + "'";
-    Connection c = koneksi.getKoneksi();
-    Statement s = c.createStatement();
-    ResultSet r = s.executeQuery(sql);
+            String sql = "SELECT * FROM tblpetugas WHERE IDPetugas='" + cmbpetugas.getSelectedItem().toString() + "'";
+            Connection c = koneksi.getKoneksi();
+            Statement s = c.createStatement();
+            ResultSet r = s.executeQuery(sql);
 
-    if (r.next()) {
-        String Nama = r.getString("NamaPetugas");
-        if (Nama != null) {
-            txtNamaPetugas.setText(Nama);
-        } else {
-            
-            txtNamaPetugas.setText("Nilai kolom Jenis adalah null");
+            if (r.next()) {
+                String Nama = r.getString("NamaPetugas");
+                if (Nama != null) {
+                    txtNamaPetugas.setText(Nama);
+                } else {
+
+                    txtNamaPetugas.setText("Nilai kolom Jenis adalah null");
+                }
+            } else {
+
+                txtNamaPetugas.setText("");
+            }
+        } catch (SQLException e) {
+
+            e.printStackTrace();
         }
-    } else {
-        
-        txtNamaPetugas.setText("");
-    }
-} catch (SQLException e) {
-    
-    e.printStackTrace();
-}
     }//GEN-LAST:event_cmbpetugasItemStateChanged
 
     private void cmbbarangItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cmbbarangItemStateChanged
         try {
-    String sql = "SELECT * FROM tblbarang WHERE KodeBarang='" + cmbbarang.getSelectedItem().toString() + "'";
-    Connection c = koneksi.getKoneksi();
-    Statement s = c.createStatement();
-    ResultSet r = s.executeQuery(sql);
+            String sql = "SELECT * FROM tblbarang WHERE KodeBarang='" + cmbbarang.getSelectedItem().toString() + "'";
+            Connection c = koneksi.getKoneksi();
+            Statement s = c.createStatement();
+            ResultSet r = s.executeQuery(sql);
 
-    if (r.next()) {
-        String Nama = r.getString("NamaBarang");
-        String HargaJual = r.getString("HargaJual");
-        String Stok = r.getString("Stok");
-        if (Nama != null) {
-            txtNamaBarang.setText(Nama);
-            txtHargaJual.setText(HargaJual);
-            txtstok.setText(Stok);
-        } else {
-            
-            txtNamaPetugas.setText("Nilai kolom Jenis adalah null");
-            txtHargaJual.setText("Nilai kolom ini adalah null");
-            txtstok.setText("Nilai kolom ini adalah null");
+            if (r.next()) {
+                String Nama = r.getString("NamaBarang");
+                String HargaJual = r.getString("HargaJual");
+                String Stok = r.getString("Stok");
+                if (Nama != null) {
+                    txtNamaBarang.setText(Nama);
+                    txtHargaJual.setText(HargaJual);
+                    txtstok.setText(Stok);
+                } else {
+
+                    txtNamaPetugas.setText("Nilai kolom Jenis adalah null");
+                    txtHargaJual.setText("Nilai kolom ini adalah null");
+                    txtstok.setText("Nilai kolom ini adalah null");
+                }
+            } else {
+
+                txtNamaPetugas.setText("");
+            }
+        } catch (SQLException e) {
+
         }
-    } else {
-        
-        txtNamaPetugas.setText("");
-    }
-} catch (SQLException e) {
-    
-}
     }//GEN-LAST:event_cmbbarangItemStateChanged
 
     private void btnsaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsaveActionPerformed
@@ -325,46 +335,42 @@ public class penjualan extends javax.swing.JFrame {
         String kj = cmbbarang.getSelectedItem().toString();
         String jumlah = txtjumlah.getText();
         String subtotal = txtsubtotal.getText();
-        
 
+        if ("".equals(kode) || tanggalBarang == null || "".equals(petugas) || "".equals(bayar) || "".equals(sisa) || "".equals(total) || "".equals(jumlah) || "".equals(subtotal) || "".equals(kj)) {
+            JOptionPane.showMessageDialog(this, "Harap Lengkapi Data", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            try {
+                Connection c = koneksi.getKoneksi();
 
-if ("".equals(kode) || tanggalBarang == null || "".equals(petugas) || "".equals(bayar) || "".equals(sisa) || "".equals(total) || "".equals(jumlah) || "".equals(subtotal) || "".equals(kj)) {
-    JOptionPane.showMessageDialog(this, "Harap Lengkapi Data", "Error", JOptionPane.ERROR_MESSAGE);
-} else {
-    try {
-        Connection c = koneksi.getKoneksi();
+                String sqlPenjualan = "INSERT INTO tblpenjualan (NoFaktur, TglPenjualan, IDPetugas, Bayar, Sisa, Total) VALUES (?, ?, ?, ?, ?, ?)";
+                PreparedStatement pPenjualan = c.prepareStatement(sqlPenjualan);
+                pPenjualan.setString(1, kode);
+                pPenjualan.setDate(2, new java.sql.Date(tanggalBarang.getTime()));
+                pPenjualan.setString(3, petugas);
+                pPenjualan.setString(4, bayar);
+                pPenjualan.setString(5, sisa);
+                pPenjualan.setString(6, total);
 
-      
-        String sqlPenjualan = "INSERT INTO tblpenjualan (NoFaktur, TglPenjualan, IDPetugas, Bayar, Sisa, Total) VALUES (?, ?, ?, ?, ?, ?)";
-        PreparedStatement pPenjualan = c.prepareStatement(sqlPenjualan);
-        pPenjualan.setString(1, kode);
-        pPenjualan.setDate(2, new java.sql.Date(tanggalBarang.getTime()));
-        pPenjualan.setString(3, petugas);
-        pPenjualan.setString(4, bayar);
-        pPenjualan.setString(5, sisa);
-        pPenjualan.setString(6, total);
+                pPenjualan.executeUpdate();
 
-        pPenjualan.executeUpdate();
+                String sqlDetailPenjualan = "INSERT INTO tbldetailpenjualan (NoFaktur, KodeBarang, Jumlah, SubTotal) VALUES (?, ?, ?, ?)";
+                PreparedStatement dDetailPenjualan = c.prepareStatement(sqlDetailPenjualan);
+                dDetailPenjualan.setString(1, kode);
+                dDetailPenjualan.setString(2, kj);
+                dDetailPenjualan.setString(3, jumlah);
+                dDetailPenjualan.setString(4, subtotal);
+                dDetailPenjualan.executeUpdate();
 
-        
-        String sqlDetailPenjualan = "INSERT INTO tbldetailpenjualan (NoFaktur, KodeBarang, Jumlah, SubTotal) VALUES (?, ?, ?, ?)";
-        PreparedStatement dDetailPenjualan = c.prepareStatement(sqlDetailPenjualan);
-        dDetailPenjualan.setString(1, kode);
-        dDetailPenjualan.setString(2, kj);
-        dDetailPenjualan.setString(3, jumlah);
-        dDetailPenjualan.setString(4, subtotal);
-        dDetailPenjualan.executeUpdate();
+                pPenjualan.close();
+                JOptionPane.showMessageDialog(this, "Penyimpanan Data Berhasil", "Succes", JOptionPane.INFORMATION_MESSAGE);
+            } catch (SQLException e) {
 
-        pPenjualan.close();
-        JOptionPane.showMessageDialog(this, "Penyimpanan Data Berhasil", "Succes", JOptionPane.INFORMATION_MESSAGE);
-    } catch (SQLException e) {
-        
-        JOptionPane.showMessageDialog(this, "Terjadi Kesalahan: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-    } finally {
-         loadData();
-        // kosong();
-    }
-}
+                JOptionPane.showMessageDialog(this, "Terjadi Kesalahan: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            } finally {
+                loadData();
+                // kosong();
+            }
+        }
 
 
     }//GEN-LAST:event_btnsaveActionPerformed
@@ -372,49 +378,70 @@ if ("".equals(kode) || tanggalBarang == null || "".equals(petugas) || "".equals(
     private void txthitungActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txthitungActionPerformed
         int HargaJual = Integer.parseInt(txtHargaJual.getText());
         int Jumlah = Integer.parseInt(txtjumlah.getText());
-        txtsubtotal.setText(Integer.toString(HargaJual*Jumlah));
+        txtsubtotal.setText(Integer.toString(HargaJual * Jumlah));
     }//GEN-LAST:event_txthitungActionPerformed
 
     private void AddItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddItemActionPerformed
-       
+
+        String kode = txtfaktur.getText();
+        String kj = cmbbarang.getSelectedItem().toString();
         String jumlah = txtjumlah.getText();
         String subtotal = txtsubtotal.getText();
-        String kj = cmbbarang.getSelectedItem().toString();
 
-if (jumlah.isEmpty() || subtotal.isEmpty() || kj.isEmpty()) {
-    JOptionPane.showMessageDialog(this, "Harap Lengkapi Data", "Error", JOptionPane.ERROR_MESSAGE);
-} 
-    loadData();
+        if ("".equals(kode) || "".equals(jumlah) || "".equals(subtotal) || "".equals(kj)) {
+            JOptionPane.showMessageDialog(this, "Harap Lengkapi Data", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            try {
+                Connection c = koneksi.getKoneksi();
+                String sqlDetailPenjualan = "INSERT INTO tbldetailpenjualan (NoFaktur, KodeBarang, Jumlah, SubTotal) VALUES (?, ?, ?, ?)";
+                PreparedStatement dDetailPenjualan = c.prepareStatement(sqlDetailPenjualan);
+                dDetailPenjualan.setString(1, kode);
+                dDetailPenjualan.setString(2, kj);
+                dDetailPenjualan.setString(3, jumlah);
+                dDetailPenjualan.setString(4, subtotal);
+                dDetailPenjualan.executeUpdate();
+
+                dDetailPenjualan.executeUpdate();
+                dDetailPenjualan.close();
+                JOptionPane.showMessageDialog(this, "Penyimpanan Data Berhasil", "Succes", JOptionPane.INFORMATION_MESSAGE);
+            } catch (SQLException e) {
+
+                JOptionPane.showMessageDialog(this, "Terjadi Kesalahan: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            } finally {
+                loadData();
+                // kosong();
+            }
+        }
 
     }//GEN-LAST:event_AddItemActionPerformed
 
     private void tblhasilMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblhasilMouseClicked
         int baris = tblhasil.getSelectedRow();
         if (baris == -1) {
-    return;
-}
+            return;
+        }
 
-if (tblhasil.getColumnCount() >=9) {
-    String kj = String.valueOf(tblhasil.getValueAt(baris, 0));
-    txtfaktur.setText(kj);
-    java.util.Date tanggalPenjualan = (java.util.Date) tblhasil.getValueAt(baris, 1);
-    txttgl.setValue(tanggalPenjualan);
-    cmbpetugas.setSelectedItem(tblhasil.getValueAt(baris, 2));
-    String Bayar = String.valueOf(tblhasil.getValueAt(baris, 3));
-    txtbayar.setText(Bayar);
-    String sisa = String.valueOf(tblhasil.getValueAt(baris, 4));
-    txtsisa.setText(sisa);
-    String total = String.valueOf(tblhasil.getValueAt(baris, 5));
-    txttotal.setText(total);
-    cmbbarang.setSelectedItem(tblhasil.getValueAt(baris, 6));
-    String jumlah = String.valueOf(tblhasil.getValueAt(baris, 7));
-    txtjumlah.setText(jumlah);
-    String SubTotal = String.valueOf(tblhasil.getValueAt(baris, 8));
-    txtsubtotal.setText(SubTotal);
-    
-} else {
-    
-}
+        if (tblhasil.getColumnCount() >= 9) {
+            String kj = String.valueOf(tblhasil.getValueAt(baris, 0));
+            txtfaktur.setText(kj);
+            java.util.Date tanggalPenjualan = (java.util.Date) tblhasil.getValueAt(baris, 1);
+            txttgl.setValue(tanggalPenjualan);
+            cmbpetugas.setSelectedItem(tblhasil.getValueAt(baris, 2));
+            String Bayar = String.valueOf(tblhasil.getValueAt(baris, 3));
+            txtbayar.setText(Bayar);
+            String sisa = String.valueOf(tblhasil.getValueAt(baris, 4));
+            txtsisa.setText(sisa);
+            String total = String.valueOf(tblhasil.getValueAt(baris, 5));
+            txttotal.setText(total);
+            cmbbarang.setSelectedItem(tblhasil.getValueAt(baris, 6));
+            String jumlah = String.valueOf(tblhasil.getValueAt(baris, 7));
+            txtjumlah.setText(jumlah);
+            String SubTotal = String.valueOf(tblhasil.getValueAt(baris, 8));
+            txtsubtotal.setText(SubTotal);
+
+        } else {
+
+        }
     }//GEN-LAST:event_tblhasilMouseClicked
 
     private void txtfakturActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtfakturActionPerformed
@@ -427,73 +454,72 @@ if (tblhasil.getColumnCount() >=9) {
 
     private void updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateActionPerformed
         int selectedRow = tblhasil.getSelectedRow();
-if (selectedRow == -1) {
-    JOptionPane.showMessageDialog(this, "Pilih Data yang ingin di Perbarui");
-    return;
-}
-
-String kode = (String) model.getValueAt(selectedRow, 0);
-java.util.Date tanggalBarang = (java.util.Date) txttgl.getValue();
-String petugas = cmbpetugas.getSelectedItem().toString();
-String jumlah = txtjumlah.getText();
-String subtotal = txtsubtotal.getText();
-String bayar = txtbayar.getText();
-String sisa = txtsisa.getText();
-String total = txttotal.getText();
-String kj = cmbbarang.getSelectedItem().toString();
-
-if (kode.isEmpty() || tanggalBarang == null || petugas.isEmpty() || bayar.isEmpty() || sisa.isEmpty() || total.isEmpty() || jumlah.isEmpty() || subtotal.isEmpty() || kj.isEmpty()) {
-    JOptionPane.showMessageDialog(this, "Harap Lengkapi Data", "Error", JOptionPane.ERROR_MESSAGE);
-} else {
-    try {
-        Connection c = koneksi.getKoneksi();
-
-        // Pernyataan pertama: Memeriksa apakah data dengan NoFaktur yang dipilih sudah ada
-        String checkSql = "SELECT NoFaktur FROM tblpenjualan WHERE NoFaktur = ?";
-        PreparedStatement checkStatement = c.prepareStatement(checkSql);
-        checkStatement.setString(1, kode);
-        ResultSet checkResult = checkStatement.executeQuery();
-
-        if (!checkResult.next()) {
-            JOptionPane.showMessageDialog(this, "Data dengan NoFaktur yang dipilih tidak ditemukan", "Error", JOptionPane.ERROR_MESSAGE);
-        } else {
-            checkResult.close();
-            checkStatement.close();
-
-           
-            c.setAutoCommit(false);
-
-            String sqlPenjualan = "UPDATE tblpenjualan SET TglPenjualan=?, IDPetugas=?, Bayar=?, Sisa=?, Total=? WHERE NoFaktur=?";
-            PreparedStatement pPenjualan = c.prepareStatement(sqlPenjualan);
-
-            pPenjualan.setDate(1, new java.sql.Date(tanggalBarang.getTime()));
-            pPenjualan.setString(2, petugas);
-            pPenjualan.setString(3, bayar);
-            pPenjualan.setString(4, sisa);
-            pPenjualan.setString(5, total);
-            pPenjualan.setString(6, kode);
-
-            pPenjualan.executeUpdate();
-
-            String sqlDetailPenjualan = "UPDATE tbldetailpenjualan SET KodeBarang=?, Jumlah=?, SubTotal=? WHERE NoFaktur=?";
-            PreparedStatement dDetailPenjualan = c.prepareStatement(sqlDetailPenjualan);
-
-            dDetailPenjualan.setString(1, kj);
-            dDetailPenjualan.setString(2, jumlah);
-            dDetailPenjualan.setString(3, subtotal);
-            dDetailPenjualan.setString(4, kode);
-            dDetailPenjualan.executeUpdate();
-            c.commit();
-            JOptionPane.showMessageDialog(this, "Pembaruan Data Berhasil", "Success", JOptionPane.INFORMATION_MESSAGE);
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this, "Pilih Data yang ingin di Perbarui");
+            return;
         }
-    } catch (SQLException e) {
-        
-        JOptionPane.showMessageDialog(this, "Terjadi Kesalahan: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-    } finally {
-        loadData();
-        // kosong();
-    }
-}
+
+        String kode = (String) model.getValueAt(selectedRow, 0);
+        java.util.Date tanggalBarang = (java.util.Date) txttgl.getValue();
+        String petugas = cmbpetugas.getSelectedItem().toString();
+        String jumlah = txtjumlah.getText();
+        String subtotal = txtsubtotal.getText();
+        String bayar = txtbayar.getText();
+        String sisa = txtsisa.getText();
+        String total = txttotal.getText();
+        String kj = cmbbarang.getSelectedItem().toString();
+
+        if (kode.isEmpty() || tanggalBarang == null || petugas.isEmpty() || bayar.isEmpty() || sisa.isEmpty() || total.isEmpty() || jumlah.isEmpty() || subtotal.isEmpty() || kj.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Harap Lengkapi Data", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            try {
+                Connection c = koneksi.getKoneksi();
+
+                // Pernyataan pertama: Memeriksa apakah data dengan NoFaktur yang dipilih sudah ada
+                String checkSql = "SELECT NoFaktur FROM tblpenjualan WHERE NoFaktur = ?";
+                PreparedStatement checkStatement = c.prepareStatement(checkSql);
+                checkStatement.setString(1, kode);
+                ResultSet checkResult = checkStatement.executeQuery();
+
+                if (!checkResult.next()) {
+                    JOptionPane.showMessageDialog(this, "Data dengan NoFaktur yang dipilih tidak ditemukan", "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    checkResult.close();
+                    checkStatement.close();
+
+                    c.setAutoCommit(false);
+
+                    String sqlPenjualan = "UPDATE tblpenjualan SET TglPenjualan=?, IDPetugas=?, Bayar=?, Sisa=?, Total=? WHERE NoFaktur=?";
+                    PreparedStatement pPenjualan = c.prepareStatement(sqlPenjualan);
+
+                    pPenjualan.setDate(1, new java.sql.Date(tanggalBarang.getTime()));
+                    pPenjualan.setString(2, petugas);
+                    pPenjualan.setString(3, bayar);
+                    pPenjualan.setString(4, sisa);
+                    pPenjualan.setString(5, total);
+                    pPenjualan.setString(6, kode);
+
+                    pPenjualan.executeUpdate();
+
+                    String sqlDetailPenjualan = "UPDATE tbldetailpenjualan SET KodeBarang=?, Jumlah=?, SubTotal=? WHERE NoFaktur=?";
+                    PreparedStatement dDetailPenjualan = c.prepareStatement(sqlDetailPenjualan);
+
+                    dDetailPenjualan.setString(1, kj);
+                    dDetailPenjualan.setString(2, jumlah);
+                    dDetailPenjualan.setString(3, subtotal);
+                    dDetailPenjualan.setString(4, kode);
+                    dDetailPenjualan.executeUpdate();
+                    c.commit();
+                    JOptionPane.showMessageDialog(this, "Pembaruan Data Berhasil", "Success", JOptionPane.INFORMATION_MESSAGE);
+                }
+            } catch (SQLException e) {
+
+                JOptionPane.showMessageDialog(this, "Terjadi Kesalahan: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            } finally {
+                loadData();
+                // kosong();
+            }
+        }
 
     }//GEN-LAST:event_updateActionPerformed
 
@@ -520,10 +546,10 @@ if (kode.isEmpty() || tanggalBarang == null || petugas.isEmpty() || bayar.isEmpt
                     String sqlPenjualan = "DELETE FROM tblpenjualan WHERE NoFaktur = ?";
                     PreparedStatement pPenjualan = c.prepareStatement(sqlPenjualan);
                     pPenjualan.setString(1, kode);
-                    pPenjualan.executeUpdate(); 
+                    pPenjualan.executeUpdate();
                     c.commit();
                     JOptionPane.showMessageDialog(this, "Penghapusan Data Berhasil", "Success", JOptionPane.INFORMATION_MESSAGE);
-                } catch (SQLException e) {            
+                } catch (SQLException e) {
                     JOptionPane.showMessageDialog(this, "Terjadi Kesalahan: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 } finally {
                     loadData();
@@ -610,7 +636,7 @@ if (kode.isEmpty() || tanggalBarang == null || petugas.isEmpty() || bayar.isEmpt
     // End of variables declaration//GEN-END:variables
 
     private void loadData() {
-         model = new DefaultTableModel();
+        model = new DefaultTableModel();
 model.getDataVector().removeAllElements();
 model.fireTableDataChanged();
 
@@ -626,8 +652,8 @@ model.addColumn("SubTotal");
 
 try {
     String sql = "SELECT A.NoFaktur, A.TglPenjualan, A.IDPetugas, A.Bayar, A.Sisa, A.Total, B.KodeBarang, B.Jumlah, B.SubTotal " +
-            "FROM tblpenjualan A " +
-            "INNER JOIN tbldetailpenjualan B " +
+            "FROM tbldetailpenjualan B " +
+            "LEFT JOIN tblpenjualan A " +
             "ON A.NoFaktur = B.NoFaktur";
 
     Connection c = koneksi.getKoneksi();
@@ -663,10 +689,11 @@ try {
             Connection c = koneksi.getKoneksi();
             Statement s = c.createStatement();
             ResultSet r = s.executeQuery(sql);
-            
-            while(r.next()){
-            
-            cmbbarang.addItem(r.getString("KodeBarang")); }
+
+            while (r.next()) {
+
+                cmbbarang.addItem(r.getString("KodeBarang"));
+            }
         } catch (SQLException e) {
         }
     }
@@ -677,14 +704,14 @@ try {
             Connection c = koneksi.getKoneksi();
             Statement s = c.createStatement();
             ResultSet r = s.executeQuery(sql);
-            
-            while(r.next()){
-            
-            cmbpetugas.addItem(r.getString("IDPetugas")); }
+
+            while (r.next()) {
+
+                cmbpetugas.addItem(r.getString("IDPetugas"));
+            }
         } catch (SQLException e) {
-            
+
         }
     }
 
-    
 }
