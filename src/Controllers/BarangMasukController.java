@@ -67,7 +67,7 @@ public class BarangMasukController {
                     + "JOIN tblpetugas AS b ON b.IDPetugas = a.IDPetugas "
                     + "JOIN tbldistributor AS c ON c.IDDistributor = a.IDDistributor";
 
-            String queryHistory = "SELECT b.NamaBarang FROM tbldetailbarangmasuk AS a "
+            String queryHistory = "SELECT b.NamaBarang FROM tbldetailbrgmasuk AS a "
                     + "JOIN tblbarang AS b ON b.KodeBarang = a.KodeBarang "
                     + "WHERE a.NoNota = ?";
 
@@ -124,7 +124,7 @@ public class BarangMasukController {
                     + "JOIN tbldistributor AS c ON c.IDDistributor = a.IDDistributor "
                     + "WHERE a.NoNota = ?";
 
-            String queryHistory = "SELECT b.NamaBarang FROM tbldetailbarangmasuk AS a "
+            String queryHistory = "SELECT b.NamaBarang FROM tbldetailbrgmasuk AS a "
                     + "JOIN tblbarang AS b ON b.KodeBarang = a.KodeBarang "
                     + "WHERE a.NoNota = ?";
 
@@ -190,7 +190,7 @@ public class BarangMasukController {
             }
 
             String queryStok = "UPDATE tblbarang SET Stok = ? WHERE KodeBarang = ?";
-            String queryHistory = "INSERT INTO tbldetailbarangmasuk(NoNota, KodeBarang, Jumlah, Subtotal) "
+            String queryHistory = "INSERT INTO tbldetailbrgmasuk(NoNota, KodeBarang, Jumlah, Subtotal) "
                     + "VALUES (?, ?, ?, ?)";
             for (String[] v : data) {
                 try (PreparedStatement p = cn.prepareStatement(queryHistory)) {
@@ -216,7 +216,7 @@ public class BarangMasukController {
     public void Delete(String noNota) {
         try {
             String query = "DELETE FROM tblbrgmasuk WHERE NoNota = ?";
-            String query2 = "DELETE FROM tbldetailbarangmasuk WHERE NoNota = ?";
+            String query2 = "DELETE FROM tbldetailbrgmasuk WHERE NoNota = ?";
             try (PreparedStatement ps = cn.prepareStatement(query)) {
                 ps.setString(1, noNota);
                 ps.executeUpdate();
