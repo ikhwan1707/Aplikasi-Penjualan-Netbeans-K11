@@ -13,8 +13,17 @@ import java.awt.Color;
 public class dashboard extends javax.swing.JFrame {
 
     int a,b;
-    dashboard() {
+    String Nama = "";
+    public dashboard() {
         initComponents();
+    }
+    
+    void setNama(String Nama){
+    this.Nama = Nama;
+    }
+    
+    void setLabelName(){
+        lblnama.setText(Nama);
     }
 
     /**
@@ -55,6 +64,7 @@ public class dashboard extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jButton3 = new javax.swing.JButton();
+        lblnama = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
         pn_utama = new javax.swing.JPanel();
 
@@ -255,7 +265,7 @@ public class dashboard extends javax.swing.JFrame {
 
         barang.setBackground(new java.awt.Color(102, 102, 102));
         barang.setFont(new java.awt.Font("SansSerif", 3, 14)); // NOI18N
-        barang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/multiple-users-silhouette (1).png"))); // NOI18N
+        barang.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/box.png"))); // NOI18N
         barang.setText("Barang");
         barang.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -287,11 +297,11 @@ public class dashboard extends javax.swing.JFrame {
         pn_5Layout.setHorizontalGroup(
             pn_5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pn_5Layout.createSequentialGroup()
-                .addContainerGap(16, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(pn_linebarang, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(barang, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18))
+                .addGap(30, 30, 30))
         );
         pn_5Layout.setVerticalGroup(
             pn_5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -310,7 +320,7 @@ public class dashboard extends javax.swing.JFrame {
 
         penjualan.setBackground(new java.awt.Color(102, 102, 102));
         penjualan.setFont(new java.awt.Font("SansSerif", 3, 14)); // NOI18N
-        penjualan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/multiple-users-silhouette (1).png"))); // NOI18N
+        penjualan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/procurement.png"))); // NOI18N
         penjualan.setText("Penjualan");
         penjualan.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -365,7 +375,7 @@ public class dashboard extends javax.swing.JFrame {
 
         BrgMasuk.setBackground(new java.awt.Color(102, 102, 102));
         BrgMasuk.setFont(new java.awt.Font("SansSerif", 3, 14)); // NOI18N
-        BrgMasuk.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/multiple-users-silhouette (1).png"))); // NOI18N
+        BrgMasuk.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/trolley.png"))); // NOI18N
         BrgMasuk.setText("BRGMASUK");
         BrgMasuk.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -420,7 +430,7 @@ public class dashboard extends javax.swing.JFrame {
 
         Laporan.setBackground(new java.awt.Color(102, 102, 102));
         Laporan.setFont(new java.awt.Font("SansSerif", 3, 14)); // NOI18N
-        Laporan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/multiple-users-silhouette (1).png"))); // NOI18N
+        Laporan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Image/report.png"))); // NOI18N
         Laporan.setText("Laporan");
         Laporan.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -483,6 +493,10 @@ public class dashboard extends javax.swing.JFrame {
             }
         });
 
+        lblnama.setFont(new java.awt.Font("Segoe UI", 3, 18)); // NOI18N
+        lblnama.setForeground(new java.awt.Color(255, 255, 255));
+        lblnama.setText("..................");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -490,13 +504,17 @@ public class dashboard extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(479, 479, 479)
                 .addComponent(jButton3)
-                .addContainerGap(541, Short.MAX_VALUE))
+                .addGap(133, 133, 133)
+                .addComponent(lblnama, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(291, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton3)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton3)
+                    .addComponent(lblnama))
                 .addContainerGap(9, Short.MAX_VALUE))
         );
 
@@ -746,6 +764,7 @@ public class dashboard extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JLabel lblnama;
     private javax.swing.JLabel penjualan;
     private javax.swing.JLabel petugas;
     private javax.swing.JPanel pn_2;

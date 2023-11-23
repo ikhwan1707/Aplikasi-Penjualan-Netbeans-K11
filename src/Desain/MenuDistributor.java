@@ -14,9 +14,7 @@ import javax.swing.JOptionPane;
  */
 public class MenuDistributor extends javax.swing.JPanel {
 
-    private int halamanSaatIni = 1;
-    private int dataPerHalaman = 8;
-    private int totalpages;
+    
     
     private static Connection conn;
     public MenuDistributor() {
@@ -52,7 +50,8 @@ public class MenuDistributor extends javax.swing.JPanel {
         btntambah = new javax.swing.JButton();
         btnhapus = new javax.swing.JButton();
         btnbatal = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        txtcari = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
         PanelAdd = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
         masterdata1 = new javax.swing.JLabel();
@@ -151,9 +150,15 @@ public class MenuDistributor extends javax.swing.JPanel {
             }
         });
 
-        jTextField1.setFont(new java.awt.Font("SansSerif", 2, 12)); // NOI18N
-        jTextField1.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField1.setText("Search");
+        txtcari.setFont(new java.awt.Font("SansSerif", 2, 12)); // NOI18N
+        txtcari.setForeground(new java.awt.Color(102, 102, 102));
+
+        jButton1.setText("Cari Id");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelviewLayout = new javax.swing.GroupLayout(panelview);
         panelview.setLayout(panelviewLayout);
@@ -177,7 +182,10 @@ public class MenuDistributor extends javax.swing.JPanel {
                                 .addComponent(btnbatal)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(panelviewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(panelviewLayout.createSequentialGroup()
+                                .addComponent(txtcari, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButton1))
                             .addComponent(masterdata)))
                     .addGroup(panelviewLayout.createSequentialGroup()
                         .addGap(30, 30, 30)
@@ -199,10 +207,12 @@ public class MenuDistributor extends javax.swing.JPanel {
                         .addComponent(btntambah)
                         .addComponent(btnhapus)
                         .addComponent(btnbatal))
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelviewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtcari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton1)))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(298, Short.MAX_VALUE))
+                .addContainerGap(289, Short.MAX_VALUE))
         );
 
         PanelMain.add(panelview, "card2");
@@ -427,7 +437,7 @@ public class MenuDistributor extends javax.swing.JPanel {
         if(btnsave.getText().equals("Tambah")){
             btnsave.setText("Save");
         }
-        else if(btnsave.getText().equals("Tambah"))
+        else if(btnsave.getText().equals("Save"))
         {
             insertData();
         }
@@ -510,6 +520,11 @@ public class MenuDistributor extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnhapusActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        cari();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PanelAdd;
@@ -519,6 +534,7 @@ public class MenuDistributor extends javax.swing.JPanel {
     private javax.swing.JButton btnsave;
     private javax.swing.JButton btntambah;
     private javax.swing.ButtonGroup gbt_jenkel;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel13;
@@ -533,13 +549,13 @@ public class MenuDistributor extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JLabel masterdata;
     private javax.swing.JLabel masterdata1;
     private javax.swing.JPanel panelview;
     private javax.swing.JTable tblhasil;
     private javax.swing.JTextField txtalamat;
+    private javax.swing.JTextField txtcari;
     private javax.swing.JTextField txtemail;
     private javax.swing.JTextField txtid;
     private javax.swing.JTextField txtkota;
@@ -693,26 +709,58 @@ public class MenuDistributor extends javax.swing.JPanel {
 
     private void TampilId() throws SQLException {
         Date sk = new Date();
-
         SimpleDateFormat format1 = new SimpleDateFormat("yyMMdd");
         String time = format1.format(sk);
-        String sql = "SELECT RIGHT(NoFaktur, 1) AS kd FROM tblpenjualan ORDER BY NoFaktur DESC LIMIT 1";
+
+        String sql = "SELECT MAX(CAST(SUBSTRING(IDDistributor, 7) AS UNSIGNED)) AS max_kode FROM tbldistributor";
         koneksi.getKoneksi();
 
         try (Statement cn = conn.createStatement(); ResultSet rs = cn.executeQuery(sql)) {
             if (rs.next()) {
-                int kode = Integer.parseInt(rs.getString("kd")) + 1;
-                txtid.setText(time + Integer.toString(kode));
+                int maxKode = rs.getInt("max_kode");
+                int newKode = maxKode + 1;
+                txtid.setText(time + String.format("%03d", newKode)); 
             } else {
-                // Jika tidak ada data, artinya ini NoFaktur pertama
                 int kode = 1;
-                txtid.setText(time + Integer.toString(kode));
+                txtid.setText(time + String.format("%03d", kode)); 
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
+
     }
+    
+    private void cari(){
+         DefaultTableModel model = (DefaultTableModel) tblhasil.getModel();
+        model.setRowCount(0);
+        String cari = txtcari.getText();
+
+        try {
+            String sql = "SELECT * FROM tbldistributor WHERE IDDistributor LIKE ?";
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setString(1, "%" + cari + "%");
+            ResultSet rs = st.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("IDDistributor");
+                String nama = rs.getString("NamaDistributor");
+                String alamat = rs.getString("Alamat");
+                String kota = rs.getString("KotaAsal");
+                String email = rs.getString("Email");
+                String tlp = rs.getString("Telepon");
+                Object[] rowData = {id, nama, alamat,kota, email, tlp};
+
+                model.addRow(rowData);
+            }
+
+            rs.close();
+            st.close();
+        } catch (SQLException e) {
+            Logger.getLogger(MenuAggota.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
+
   
 }
 

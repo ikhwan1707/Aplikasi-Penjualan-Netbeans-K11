@@ -52,7 +52,8 @@ public class MenuJenis extends javax.swing.JPanel {
         btntambah = new javax.swing.JButton();
         btnhapus = new javax.swing.JButton();
         btnbatal = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        txtcari = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
         PanelAdd = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
         masterdata1 = new javax.swing.JLabel();
@@ -61,7 +62,7 @@ public class MenuJenis extends javax.swing.JPanel {
         jButton4 = new javax.swing.JButton();
         jTextField2 = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        txtjenis = new javax.swing.JTextField();
+        txtid = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         txtnama = new javax.swing.JTextField();
 
@@ -142,10 +143,17 @@ public class MenuJenis extends javax.swing.JPanel {
         });
         panelview.add(btnbatal, new org.netbeans.lib.awtextra.AbsoluteConstraints(248, 44, -1, -1));
 
-        jTextField1.setFont(new java.awt.Font("SansSerif", 2, 12)); // NOI18N
-        jTextField1.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField1.setText("Search");
-        panelview.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(721, 44, 201, -1));
+        txtcari.setFont(new java.awt.Font("SansSerif", 2, 12)); // NOI18N
+        txtcari.setForeground(new java.awt.Color(102, 102, 102));
+        panelview.add(txtcari, new org.netbeans.lib.awtextra.AbsoluteConstraints(721, 44, 201, -1));
+
+        jButton1.setText("Cari Kode");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        panelview.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 40, -1, -1));
 
         PanelMain.add(panelview, "card2");
 
@@ -193,11 +201,11 @@ public class MenuJenis extends javax.swing.JPanel {
 
         jLabel4.setText("Kode Jenis");
 
-        txtjenis.setFont(new java.awt.Font("SansSerif", 2, 12)); // NOI18N
-        txtjenis.setForeground(new java.awt.Color(102, 102, 102));
-        txtjenis.addActionListener(new java.awt.event.ActionListener() {
+        txtid.setFont(new java.awt.Font("SansSerif", 2, 12)); // NOI18N
+        txtid.setForeground(new java.awt.Color(102, 102, 102));
+        txtid.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtjenisActionPerformed(evt);
+                txtidActionPerformed(evt);
             }
         });
 
@@ -225,7 +233,7 @@ public class MenuJenis extends javax.swing.JPanel {
                         .addComponent(jLabel16)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(masterdata1))
-                    .addComponent(txtjenis)
+                    .addComponent(txtid)
                     .addComponent(txtnama)
                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(PanelAddLayout.createSequentialGroup()
@@ -256,12 +264,12 @@ public class MenuJenis extends javax.swing.JPanel {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtjenis, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtid, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(txtnama, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(500, Short.MAX_VALUE))
+                .addContainerGap(482, Short.MAX_VALUE))
         );
 
         PanelMain.add(PanelAdd, "card2");
@@ -277,9 +285,9 @@ public class MenuJenis extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_masterdata1MouseClicked
 
-    private void txtjenisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtjenisActionPerformed
+    private void txtidActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtidActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtjenisActionPerformed
+    }//GEN-LAST:event_txtidActionPerformed
 
     private void btntambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btntambahActionPerformed
         PanelMain.removeAll();
@@ -294,10 +302,10 @@ public class MenuJenis extends javax.swing.JPanel {
     }//GEN-LAST:event_btntambahActionPerformed
 
     private void btnsaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnsaveActionPerformed
-        if(btnsave.getText().equals("Tambah")){
+         if(btnsave.getText().equals("Tambah")){
             btnsave.setText("Save");
         }
-        else if(btnsave.getText().equals("Tambah"))
+        else if(btnsave.getText().equals("Save"))
         {
             insertData();
         }
@@ -363,6 +371,11 @@ public class MenuJenis extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnhapusActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        cari();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PanelAdd;
@@ -372,6 +385,7 @@ public class MenuJenis extends javax.swing.JPanel {
     private javax.swing.JButton btnsave;
     private javax.swing.JButton btntambah;
     private javax.swing.ButtonGroup gbt_jenkel;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel14;
@@ -380,13 +394,13 @@ public class MenuJenis extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JLabel masterdata;
     private javax.swing.JLabel masterdata1;
     private javax.swing.JPanel panelview;
     private javax.swing.JTable tblhasil;
-    private javax.swing.JTextField txtjenis;
+    private javax.swing.JTextField txtcari;
+    private javax.swing.JTextField txtid;
     private javax.swing.JTextField txtnama;
     // End of variables declaration//GEN-END:variables
 
@@ -417,7 +431,7 @@ public class MenuJenis extends javax.swing.JPanel {
     }
 
     private void resetform() {
-        txtjenis.setText("");
+        txtid.setText("");
         txtnama.setText("");
         
         
@@ -443,13 +457,13 @@ public class MenuJenis extends javax.swing.JPanel {
         if(pilih!=-1){
         String kode = tblhasil.getValueAt(pilih, 0).toString();
         String nama = tblhasil.getValueAt(pilih, 1).toString();
-        txtjenis.setText(kode);
+        txtid.setText(kode);
         txtnama.setText(nama);
         }
     }
 
     private void insertData() {
-        String kode = txtjenis.getText();
+        String kode = txtid.getText();
     String nama = txtnama.getText();
     
         if (nama.isEmpty() || kode.isEmpty()) {
@@ -479,7 +493,7 @@ public class MenuJenis extends javax.swing.JPanel {
     private void updateData() {
         int pilih = tblhasil.getSelectedRow();
     String id = tblhasil.getValueAt(pilih, 0).toString();
-    String kode = txtjenis.getText();
+    String kode = txtid.getText();
     String nama = txtnama.getText();
     
         if (nama.isEmpty() || kode.isEmpty()) {
@@ -508,25 +522,49 @@ public class MenuJenis extends javax.swing.JPanel {
 
     private void TampilId() throws SQLException {
         Date sk = new Date();
-
         SimpleDateFormat format1 = new SimpleDateFormat("yyMMdd");
         String time = format1.format(sk);
-        String sql = "SELECT RIGHT(NoFaktur, 1) AS kd FROM tblpenjualan ORDER BY NoFaktur DESC LIMIT 1";
+
+        String sql = "SELECT MAX(CAST(SUBSTRING(KodeJenis, 7) AS UNSIGNED)) AS max_kode FROM tbljenis";
         koneksi.getKoneksi();
 
         try (Statement cn = conn.createStatement(); ResultSet rs = cn.executeQuery(sql)) {
             if (rs.next()) {
-                int kode = Integer.parseInt(rs.getString("kd")) + 1;
-                txtjenis.setText(time + Integer.toString(kode));
+                int maxKode = rs.getInt("max_kode");
+                int newKode = maxKode + 1;
+                txtid.setText(time + String.format("%03d", newKode)); 
             } else {
-                
                 int kode = 1;
-                txtjenis.setText(time + Integer.toString(kode));
+                txtid.setText(time + String.format("%03d", kode)); 
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
+
+    }
+    
+    private void cari(){
+         DefaultTableModel model = (DefaultTableModel) tblhasil.getModel();
+        model.setRowCount(0);
+        String cari = txtcari.getText();
+
+        try {
+            String sql = "SELECT * FROM tbljenis WHERE KodeJenis LIKE ?";
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setString(1, "%" + cari + "%");
+            ResultSet rs = st.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("KodeJenis");
+                String nama = rs.getString("Jenis");
+                Object[] rowData = {id, nama};
+
+                model.addRow(rowData);
+            }
+        } catch (SQLException e) {
+            Logger.getLogger(MenuAggota.class.getName()).log(Level.SEVERE, null, e);
+        }
     }
   
 }

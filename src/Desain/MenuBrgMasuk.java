@@ -1,18 +1,18 @@
 
 package Desain;
-import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import Controllers.BarangMasukController;
 import java.util.List;
 import java.sql.*;
-import penjualan.koneksi;
 import java.util.ArrayList;
 import Controllers.BarangController;
 import Controllers.PetugasController;
 import Controllers.DistributorController;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.Date;
+import java.text.SimpleDateFormat;
 import penjualan.koneksi;
 /**
  *
@@ -33,6 +33,11 @@ public class MenuBrgMasuk extends javax.swing.JPanel {
          loadData();
         loadDetail();
         conn=koneksi.getKoneksi();
+        try {
+            TampilId();
+        } catch (SQLException ex) {
+            Logger.getLogger(MenuPenjualan.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -56,7 +61,8 @@ public class MenuBrgMasuk extends javax.swing.JPanel {
         btntambah = new javax.swing.JButton();
         btndelete = new javax.swing.JButton();
         btnBatal = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        txtcari = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
         pn_add1 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
         jLabel45 = new javax.swing.JLabel();
@@ -168,12 +174,18 @@ public class MenuBrgMasuk extends javax.swing.JPanel {
         btnBatal.setForeground(new java.awt.Color(255, 255, 255));
         btnBatal.setText("Batal");
 
-        jTextField1.setFont(new java.awt.Font("SansSerif", 2, 12)); // NOI18N
-        jTextField1.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField1.setText("Search");
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        txtcari.setFont(new java.awt.Font("SansSerif", 2, 12)); // NOI18N
+        txtcari.setForeground(new java.awt.Color(102, 102, 102));
+        txtcari.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                txtcariActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Cari NoNota");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
             }
         });
 
@@ -200,9 +212,12 @@ public class MenuBrgMasuk extends javax.swing.JPanel {
                                 .addComponent(btnBatal)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pn_mainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(pn_mainLayout.createSequentialGroup()
+                                .addComponent(txtcari, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButton1))
                             .addComponent(masterdata))))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(62, Short.MAX_VALUE))
         );
         pn_mainLayout.setVerticalGroup(
             pn_mainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -219,10 +234,12 @@ public class MenuBrgMasuk extends javax.swing.JPanel {
                         .addComponent(btntambah)
                         .addComponent(btndelete)
                         .addComponent(btnBatal))
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pn_mainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtcari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton1)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(304, Short.MAX_VALUE))
+                .addContainerGap(235, Short.MAX_VALUE))
         );
 
         PanelMain.add(pn_main, "card2");
@@ -244,7 +261,7 @@ public class MenuBrgMasuk extends javax.swing.JPanel {
                 jButton25ActionPerformed(evt);
             }
         });
-        jPanel8.add(jButton25, new org.netbeans.lib.awtextra.AbsoluteConstraints(317, 596, 88, 32));
+        jPanel8.add(jButton25, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 320, 88, 32));
 
         jButton27.setText("Close");
         jButton27.addActionListener(new java.awt.event.ActionListener() {
@@ -252,7 +269,7 @@ public class MenuBrgMasuk extends javax.swing.JPanel {
                 jButton27ActionPerformed(evt);
             }
         });
-        jPanel8.add(jButton27, new org.netbeans.lib.awtextra.AbsoluteConstraints(38, 596, 86, 32));
+        jPanel8.add(jButton27, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 320, 100, 32));
 
         jLabel47.setText("Tanggal Barang Masuk");
         jPanel8.add(jLabel47, new org.netbeans.lib.awtextra.AbsoluteConstraints(38, 72, -1, -1));
@@ -262,19 +279,19 @@ public class MenuBrgMasuk extends javax.swing.JPanel {
 
         jLabel48.setText("No. Nota");
         jPanel8.add(jLabel48, new org.netbeans.lib.awtextra.AbsoluteConstraints(442, 72, -1, -1));
-        jPanel8.add(noNota, new org.netbeans.lib.awtextra.AbsoluteConstraints(592, 67, 79, -1));
+        jPanel8.add(noNota, new org.netbeans.lib.awtextra.AbsoluteConstraints(592, 67, 120, -1));
 
         jLabel49.setText("Nama Distributor");
         jPanel8.add(jLabel49, new org.netbeans.lib.awtextra.AbsoluteConstraints(442, 154, -1, -1));
         jPanel8.add(kota, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 190, 200, -1));
 
-        jButton29.setText("Cari Data");
+        jButton29.setText("AddNew");
         jButton29.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton29ActionPerformed(evt);
             }
         });
-        jPanel8.add(jButton29, new org.netbeans.lib.awtextra.AbsoluteConstraints(677, 67, -1, -1));
+        jPanel8.add(jButton29, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 70, -1, -1));
 
         jLabel36.setText("ID Petugas");
         jPanel8.add(jLabel36, new org.netbeans.lib.awtextra.AbsoluteConstraints(132, 113, -1, -1));
@@ -355,7 +372,7 @@ public class MenuBrgMasuk extends javax.swing.JPanel {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap(16, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel50, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel41, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -414,7 +431,7 @@ public class MenuBrgMasuk extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel8.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(38, 231, -1, -1));
+        jPanel8.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 230, 780, -1));
 
         dataTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -437,30 +454,33 @@ public class MenuBrgMasuk extends javax.swing.JPanel {
                 saveActionPerformed(evt);
             }
         });
-        jPanel8.add(save, new org.netbeans.lib.awtextra.AbsoluteConstraints(142, 596, 157, 32));
+        jPanel8.add(save, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 270, 180, 32));
 
         jLabel40.setText("Total  Rp");
-        jPanel8.add(jLabel40, new org.netbeans.lib.awtextra.AbsoluteConstraints(621, 600, -1, -1));
+        jPanel8.add(jLabel40, new org.netbeans.lib.awtextra.AbsoluteConstraints(850, 360, -1, -1));
 
+        total.setText("0");
         total.setEnabled(false);
         total.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 totalActionPerformed(evt);
             }
         });
-        jPanel8.add(total, new org.netbeans.lib.awtextra.AbsoluteConstraints(704, 595, 120, -1));
+        jPanel8.add(total, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 390, 260, -1));
 
         javax.swing.GroupLayout pn_add1Layout = new javax.swing.GroupLayout(pn_add1);
         pn_add1.setLayout(pn_add1Layout);
         pn_add1Layout.setHorizontalGroup(
             pn_add1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pn_add1Layout.createSequentialGroup()
-                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, 1091, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 17, Short.MAX_VALUE))
+                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, 1148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         pn_add1Layout.setVerticalGroup(
             pn_add1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, 768, Short.MAX_VALUE)
+            .addGroup(pn_add1Layout.createSequentialGroup()
+                .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, 734, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         PanelMain.add(pn_add1, "card2");
@@ -479,9 +499,9 @@ public class MenuBrgMasuk extends javax.swing.JPanel {
         PanelMain.revalidate();            
     }//GEN-LAST:event_btntambahActionPerformed
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void txtcariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcariActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_txtcariActionPerformed
 
     private void btndeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndeleteActionPerformed
         // TODO add your handling code here:
@@ -514,6 +534,7 @@ public class MenuBrgMasuk extends javax.swing.JPanel {
 
     private void jButton29ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton29ActionPerformed
         // TODO add your handling code here:
+        
         if ("".equals(noNota.getText())) {
             JOptionPane.showMessageDialog(null, "Tak ada nomer nota yang di pilihi");
         } else {
@@ -588,52 +609,42 @@ public class MenuBrgMasuk extends javax.swing.JPanel {
     private void addItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addItemActionPerformed
         // TODO add your handling code here:
         if (kodePetugas.getSelectedIndex() == 0
-            || kodeDistributor.getSelectedIndex() == 0
-            || kodeBarang.getSelectedIndex() == 0) {
-            JOptionPane.showMessageDialog(null, "Data tidak boleh kosong");
-        } else {
-            try {
-                String[] data = {
-                    kodeBarang.getSelectedItem().toString(),
-                    namaBarang.getText(),
-                    jumlah.getText(),
-                    subTotal.getText()
-                };
+    || kodeDistributor.getSelectedIndex() == 0
+    || kodeBarang.getSelectedIndex() == 0) {
+    JOptionPane.showMessageDialog(null, "Data tidak boleh kosong");
+} else {
+    // Pengecekan apakah subTotal tidak kosong dan dapat diubah menjadi bilangan bulat
+    if (!subTotal.getText().isEmpty()) {
+        try {
+             
+            int subTotalValue = Integer.parseInt(subTotal.getText());
+            
+            // Perbarui nilai total sebelum menambahkan data ke detail
+            int totalNilai = Integer.parseInt(total.getText()) + subTotalValue;
+            total.setText(Integer.toString(totalNilai));
 
-                // Validasi data numerik
-                if (!data[2].isEmpty() && isNumeric(data[2]) && !data[3].isEmpty()) {
-                    int jumlahValue = Integer.parseInt(data[2]);
-                    int subTotalValue = Integer.parseInt(data[3]);
+            // Tambahkan data ke detail setelah memastikan total sudah diperbarui
+            String[] data = {kodeBarang.getSelectedItem().toString(), namaBarang.getText(), jumlah.getText(), subTotal.getText(), total.getText()};
+            detail.add(data);
+            loadDetail();
+            save.setEnabled(true);
+            
 
-                    // Lakukan operasi hanya jika parsing berhasil
-                    detail.add(data);
-                    loadDetail();
-                    save.setEnabled(true);
-
-                    // Perbarui total hanya jika jumlah dan subtotal dapat diubah menjadi angka
-                    int totalNilai = jumlahValue + subTotalValue;
-                    total.setText(Integer.toString(totalNilai));
-
-                    // Set nilai subTotal ke 0 dan hapus nilai dari input jumlah
-                    subTotal.setText("0");
-                    jumlah.setText("");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Jumlah harus berupa angka dan tidak boleh kosong. Subtotal tidak boleh kosong");
-                }
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "Format angka tidak valid");
-            }
+        } catch (NumberFormatException e) {
+            // Tangani jika terjadi NumberFormatException, misalnya dengan memberikan nilai default atau pesan kesalahan
+           
+            JOptionPane.showMessageDialog(null, "Subtotal bukan bilangan bulat yang valid");
         }
+    }
+    
+    subTotal.setText("0");
+    jumlah.setText("");
 
-        }
-        // Fungsi untuk memeriksa apakah sebuah string dapat diubah menjadi angka
-        private boolean isNumeric(String str) {
-            try {
-                Integer.parseInt(str);
-                return true;
-            } catch (NumberFormatException e) {
-                return false;
-            }
+
+}
+
+
+
 
     }//GEN-LAST:event_addItemActionPerformed
 
@@ -660,7 +671,13 @@ public class MenuBrgMasuk extends javax.swing.JPanel {
 
     private void totalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_totalActionPerformed
         // TODO add your handling code here:
+       
     }//GEN-LAST:event_totalActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        cari();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -673,6 +690,7 @@ public class MenuBrgMasuk extends javax.swing.JPanel {
     private javax.swing.ButtonGroup gbt_jenkel;
     private javax.swing.JTextField hargaJual;
     private javax.swing.JButton hitung;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton25;
     private javax.swing.JButton jButton27;
     private javax.swing.JButton jButton29;
@@ -698,7 +716,6 @@ public class MenuBrgMasuk extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jumlah;
     private javax.swing.JComboBox<String> kodeBarang;
     private javax.swing.JComboBox<String> kodeDistributor;
@@ -717,6 +734,7 @@ public class MenuBrgMasuk extends javax.swing.JPanel {
     private javax.swing.JTextField tanggal;
     private javax.swing.JTable tblhasil;
     private javax.swing.JTextField total;
+    private javax.swing.JTextField txtcari;
     // End of variables declaration//GEN-END:variables
 
     private void showpanel() {
@@ -813,7 +831,64 @@ public class MenuBrgMasuk extends javax.swing.JPanel {
     } 
 
     
-  
+  private void TampilId() throws SQLException {
+        Date sk = new Date();
+        SimpleDateFormat format1 = new SimpleDateFormat("yyMMdd");
+        String time = format1.format(sk);
+
+        String sql = "SELECT MAX(CAST(SUBSTRING(NoNota, 7) AS UNSIGNED)) AS max_kode FROM tblbrgmasuk";
+        koneksi.getKoneksi();
+
+        try (Statement cn = conn.createStatement(); ResultSet rs = cn.executeQuery(sql)) {
+            if (rs.next()) {
+                int maxKode = rs.getInt("max_kode");
+                int newKode = maxKode + 1;
+                noNota.setText(time + String.format("%03d", newKode)); 
+            } else {
+                int kode = 1;
+                noNota.setText(time + String.format("%03d", kode)); 
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+}
+    private void cari() {
+        Connection conn = penjualan.koneksi.getKoneksi();
+        DefaultTableModel model = (DefaultTableModel) tblhasil.getModel();
+        model.setRowCount(0);
+        String cari = txtcari.getText();
+
+        try {
+            // Query dengan menggunakan parameter (?)
+            String sql = "SELECT a.NoNota, a.TglMasuk, c.NamaDistributor, b.NamaPetugas, a.Total " +
+                "FROM tblbrgmasuk AS a " +
+                "JOIN tblpetugas AS b ON b.IDPetugas = a.IDPetugas " +
+                "JOIN tbldistributor AS c ON c.IDDistributor = a.IDDistributor " +
+                "WHERE a.NoNota = ?";
+
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setString(1, "%" + cari + "%");  // Mengatur parameter dengan nilai pencarian
+            ResultSet rs = st.executeQuery();
+
+            while (rs.next()) {
+                // Mendapatkan nilai kolom dari hasil query
+                String noFaktur = rs.getString("NoNota");
+                String namaBarang = rs.getString("NamaBarang");
+                String tglPenjualan = rs.getString("TglMasuk");
+                String idPetugas = rs.getString("NamaDistributor");
+                String bayar = rs.getString("NamaPetugas");
+                String total = rs.getString("Total");
+
+                // Menambahkan data ke dalam tabel
+                Object[] rowData = {noFaktur, namaBarang, tglPenjualan, idPetugas, bayar, total};
+                model.addRow(rowData);
+            }
+        } catch (SQLException e) {
+            // Menangani exception
+            Logger.getLogger(MenuAggota.class.getName()).log(Level.SEVERE, null, e);
+        }
+
+    }
 }
 
 

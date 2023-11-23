@@ -54,7 +54,8 @@ public class MenuAggota extends javax.swing.JPanel {
         btntambah = new javax.swing.JButton();
         btnhapus = new javax.swing.JButton();
         btnbatal = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        txtcari = new javax.swing.JTextField();
+        btncari = new javax.swing.JButton();
         PanelAdd = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
         masterdata1 = new javax.swing.JLabel();
@@ -140,6 +141,11 @@ public class MenuAggota extends javax.swing.JPanel {
         btnhapus.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         btnhapus.setForeground(new java.awt.Color(255, 255, 255));
         btnhapus.setText("Hapus");
+        btnhapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnhapusActionPerformed(evt);
+            }
+        });
         panelview.add(btnhapus, new org.netbeans.lib.awtextra.AbsoluteConstraints(134, 44, -1, -1));
 
         btnbatal.setBackground(new java.awt.Color(255, 102, 0));
@@ -153,10 +159,22 @@ public class MenuAggota extends javax.swing.JPanel {
         });
         panelview.add(btnbatal, new org.netbeans.lib.awtextra.AbsoluteConstraints(248, 44, -1, -1));
 
-        jTextField1.setFont(new java.awt.Font("SansSerif", 2, 12)); // NOI18N
-        jTextField1.setForeground(new java.awt.Color(102, 102, 102));
-        jTextField1.setText("Search");
-        panelview.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(744, 44, 201, -1));
+        txtcari.setFont(new java.awt.Font("SansSerif", 2, 12)); // NOI18N
+        txtcari.setForeground(new java.awt.Color(102, 102, 102));
+        txtcari.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtcariActionPerformed(evt);
+            }
+        });
+        panelview.add(txtcari, new org.netbeans.lib.awtextra.AbsoluteConstraints(744, 44, 201, -1));
+
+        btncari.setText("cari id");
+        btncari.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btncariActionPerformed(evt);
+            }
+        });
+        panelview.add(btncari, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 40, -1, 30));
 
         PanelMain.add(panelview, "card2");
 
@@ -328,7 +346,7 @@ public class MenuAggota extends javax.swing.JPanel {
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(txtalamat, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(296, Short.MAX_VALUE))
+                .addContainerGap(251, Short.MAX_VALUE))
         );
 
         PanelMain.add(PanelAdd, "card2");
@@ -376,7 +394,7 @@ public class MenuAggota extends javax.swing.JPanel {
         if(btnsave.getText().equals("Tambah")){
             btnsave.setText("Save");
         }
-        else if(btnsave.getText().equals("Tambah"))
+        else if(btnsave.getText().equals("Save"))
         {
             insertData();
         }
@@ -429,11 +447,50 @@ public class MenuAggota extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_tblhasilMouseClicked
 
+    private void btncariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btncariActionPerformed
+        // TODO add your handling code here:
+        cari();
+    }//GEN-LAST:event_btncariActionPerformed
+
+    private void txtcariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcariActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtcariActionPerformed
+
+    private void btnhapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnhapusActionPerformed
+        // TODO add your handling code here:
+         int pilih = tblhasil.getSelectedRow();
+        if(pilih==-1){
+        JOptionPane.showMessageDialog(this, "Pilih data yg ingin dihapus", "Pemberitahuan", JOptionPane.ERROR_MESSAGE);
+        return;
+        }
+        int confirm = JOptionPane.showConfirmDialog(this, "Apakah anda yakin ingin menghapus data ini", "Konfirmasi", JOptionPane.YES_NO_OPTION);
+        if(confirm==JOptionPane.YES_OPTION){
+        String id = tblhasil.getValueAt(pilih, 0).toString();
+        
+            try {
+                String sql = "DELETE FROM tblpetugas WHERE IDPetugas=?";
+                PreparedStatement st = conn.prepareStatement(sql);
+                st.setString(1, id);
+                
+                int rowDelete = st.executeUpdate();
+                if(rowDelete > 0){
+                    JOptionPane.showMessageDialog(this, "Data berhasil dihapus");
+                    resetform();
+                    loadData();
+                }
+                st.close();
+            } catch (SQLException e) {
+                Logger.getLogger(MenuAggota.class.getName()).log(Level.SEVERE,null,e);
+            }
+        }
+    }//GEN-LAST:event_btnhapusActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PanelAdd;
     private javax.swing.JPanel PanelMain;
     private javax.swing.JButton btnbatal;
+    private javax.swing.JButton btncari;
     private javax.swing.JButton btnhapus;
     private javax.swing.JButton btnsave;
     private javax.swing.JButton btntambah;
@@ -450,13 +507,13 @@ public class MenuAggota extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JLabel masterdata;
     private javax.swing.JLabel masterdata1;
     private javax.swing.JPanel panelview;
     private javax.swing.JTable tblhasil;
     private javax.swing.JTextField txtalamat;
+    private javax.swing.JTextField txtcari;
     private javax.swing.JTextField txtemail;
     private javax.swing.JTextField txtid;
     private javax.swing.JTextField txtnama;
@@ -467,7 +524,7 @@ public class MenuAggota extends javax.swing.JPanel {
         DefaultTableModel model = (DefaultTableModel) tblhasil.getModel();
            model.setRowCount(0);
            try {
-               String sql = "Select * From tblpetugas";
+               String sql = "Select * From tblpetugas ";
                PreparedStatement st = conn.prepareStatement(sql);
                ResultSet rs = st.executeQuery();
                while(rs.next()){
@@ -487,6 +544,7 @@ public class MenuAggota extends javax.swing.JPanel {
            } catch (SQLException e) {
                 Logger.getLogger(MenuAggota.class.getName()).log(Level.SEVERE,null,e);
            }
+
     }
 
     private void setTabelModel() {
@@ -511,24 +569,26 @@ public class MenuAggota extends javax.swing.JPanel {
 
     private void TampilId() throws SQLException {
         Date sk = new Date();
-
         SimpleDateFormat format1 = new SimpleDateFormat("yyMMdd");
         String time = format1.format(sk);
-        String sql = "SELECT RIGHT(NoFaktur, 1) AS kd FROM tblpenjualan ORDER BY NoFaktur DESC LIMIT 1";
+
+        String sql = "SELECT MAX(CAST(SUBSTRING(IDPetugas, 7) AS UNSIGNED)) AS max_kode FROM tblPetugas";
         koneksi.getKoneksi();
 
         try (Statement cn = conn.createStatement(); ResultSet rs = cn.executeQuery(sql)) {
             if (rs.next()) {
-                int kode = Integer.parseInt(rs.getString("kd")) + 1;
-                txtid.setText(time + Integer.toString(kode));
+                int maxKode = rs.getInt("max_kode");
+                int newKode = maxKode + 1;
+                txtid.setText(time + String.format("%03d", newKode)); 
             } else {
                 // Jika tidak ada data, artinya ini NoFaktur pertama
                 int kode = 1;
-                txtid.setText(time + Integer.toString(kode));
+                txtid.setText(time + String.format("%03d", kode)); 
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
 
     }
     private void dataTable() {
@@ -613,6 +673,7 @@ public class MenuAggota extends javax.swing.JPanel {
                 
                 loadData();
                 resetform();
+                showpanel();
             };
             st.close();
         } catch (SQLException e) {
@@ -624,6 +685,35 @@ public class MenuAggota extends javax.swing.JPanel {
         btnhapus.setVisible(false);
         btnbatal.setVisible(false);
     }    
+    
+    private void cari(){
+         DefaultTableModel model = (DefaultTableModel) tblhasil.getModel();
+        model.setRowCount(0);
+        String cari = txtcari.getText();
+
+        try {
+            String sql = "SELECT * FROM tblpetugas WHERE IDPetugas LIKE ?";
+            PreparedStatement st = conn.prepareStatement(sql);
+            st.setString(1, "%" + cari + "%");
+            ResultSet rs = st.executeQuery();
+
+            while (rs.next()) {
+                int id = rs.getInt("IDPetugas");
+                String nama = rs.getString("NamaPetugas");
+                String alamat = rs.getString("Alamat");
+                String email = rs.getString("Email");
+                String tlp = rs.getString("Telepon");
+                Object[] rowData = {id, nama, alamat, email, tlp};
+
+                model.addRow(rowData);
+            }
+
+            rs.close();
+            st.close();
+        } catch (SQLException e) {
+            Logger.getLogger(MenuAggota.class.getName()).log(Level.SEVERE, null, e);
+        }
+    }
   
 }
 
