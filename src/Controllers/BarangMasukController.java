@@ -189,24 +189,23 @@ public class BarangMasukController {
                 ps.close();
             }
 
-            String queryStok = "UPDATE tblbarang SET Stok = ? WHERE KodeBarang = ?";
+            String queryStok = "UPDATE tblbarang SET stok = stok + ? WHERE KodeBarang = ?";
             String queryHistory = "INSERT INTO tbldetailbrgmasuk(NoNota, KodeBarang, Jumlah, Subtotal) "
                     + "VALUES (?, ?, ?, ?)";
             for (String[] v : data) {
-                try (PreparedStatement p = cn.prepareStatement(queryHistory)) {
-                    p.setString(1, NoNota);
-                    p.setString(2, v[0]);
-                    p.setString(3, v[2]);
-                    p.setString(4, v[3]);
-                    p.executeUpdate();
-                    p.close();
+                try (PreparedStatement psHistory = cn.prepareStatement(queryHistory); 
+         PreparedStatement psUpdateStok = cn.prepareStatement(queryStok)) {
+                    psHistory.setString(1, NoNota);
+                    psHistory.setString(2, v[0]);
+                    psHistory.setString(3, v[2]);
+                    psHistory.setString(4, v[3]);
+                    psHistory.executeUpdate();
+                    
+                    psUpdateStok.setString(1, v[2]); // Assuming v[2] contains the quantity to be subtracted from stock
+                    psUpdateStok.setString(2, v[0]);
+                    psUpdateStok.executeUpdate();
+                    psHistory.close();
                 }
-                
-//                int stok = Integer.parseInt(v[2]);
-//                try (PreparedStatement pst = cn.prepareStatement(queryStok)) {
-//                    pst.setString(1, Integer.toString(stok));
-//                    pst.setString(2, v[0]);
-//                }
             }
         } catch (SQLException e) {
             System.out.print(e.getMessage());

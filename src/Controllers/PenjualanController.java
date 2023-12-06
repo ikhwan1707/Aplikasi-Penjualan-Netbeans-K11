@@ -88,51 +88,51 @@ public class PenjualanController {
         return check;
     }
 
-    public List<String[]> IndexPenjualanBarang() {
-        List<String[]> dataPenjualan = new ArrayList<>();
-        StringBuilder result = new StringBuilder();
+   public List<String[]> IndexPenjualanBarang() {
+    List<String[]> dataPenjualan = new ArrayList<>();
 
-//      Eksekusi kode
-        try {
-            String query = "SELECT * FROM tblpenjualan";
-            String queryDetail = "SELECT a.NoFaktur AS noFaktur, b.NamaBarang AS namaBarang FROM tbldetailpenjualan AS a JOIN tblbarang AS b ON b.KodeBarang = a.KodeBarang WHERE a.NoFaktur = ?";
+    try {
+        String query = "SELECT * FROM tblpenjualan";
+        String queryDetail = "SELECT a.NoFaktur AS noFaktur, GROUP_CONCAT(b.NamaBarang) AS namaBarang " +
+                             "FROM tbldetailpenjualan AS a " +
+                             "JOIN tblbarang AS b ON b.KodeBarang = a.KodeBarang " +
+                             "WHERE a.NoFaktur = ? " +
+                             "GROUP BY a.NoFaktur";
 
-            try (PreparedStatement ps = cn.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
+        try (PreparedStatement ps = cn.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                String noFaktur = rs.getString("NoFaktur");
 
-                while (rs.next()) {
-                    String noFaktur = rs.getString("NoFaktur");
-
-                    // Mengambil data barang pada tbl detail penjualan
-                    List<String> detail = new ArrayList<>();
-                    try (PreparedStatement psd = cn.prepareStatement(queryDetail)) {
-                        psd.setString(1, noFaktur);
-                        try (ResultSet rsd = psd.executeQuery()) {
-                            while (rsd.next()) {
-                                String namaBarang = rsd.getString("namaBarang");
-                                detail.add(namaBarang);
-                            }
+                // Mengambil data barang pada tbl detail penjualan
+                List<String> detail = new ArrayList<>();
+                try (PreparedStatement psd = cn.prepareStatement(queryDetail)) {
+                    psd.setString(1, noFaktur);
+                    try (ResultSet rsd = psd.executeQuery()) {
+                        if (rsd.next()) {
+                            String namaBarang = rsd.getString("namaBarang");
+                            detail.add(namaBarang);
                         }
                     }
-
-                    // Mengubah list menjadi String gabungan
-                    String namaBarang = String.join(", ", detail);
-
-                    String tglPenjualan = rs.getString("TglPenjualan");
-                    String idPetugas = rs.getString("IDPetugas");
-                    String bayar = rs.getString("Bayar");
-                    String sisa = rs.getString("Sisa");
-                    String total = rs.getString("Total");
-
-                    String[] data = {noFaktur, namaBarang, tglPenjualan, idPetugas, bayar, sisa, total};
-                    dataPenjualan.add(data);
                 }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace(); // use e.printStackTrace() to print the exception details to the console
-        }
 
-        return dataPenjualan;
+                String tglPenjualan = rs.getString("TglPenjualan");
+                String idPetugas = rs.getString("IDPetugas");
+                String bayar = rs.getString("Bayar");
+                String sisa = rs.getString("Sisa");
+                String total = rs.getString("Total");
+
+                String[] data = {noFaktur, String.join(", ", detail), tglPenjualan, idPetugas, bayar, sisa, total};
+                dataPenjualan.add(data);
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+
+    return dataPenjualan;
+}
+
+
 
     public void Store(List<String[]> data, String noFaktur, String tglPenjualan, String idPetugas, String bayar, String sisa, String total) {
         try {
@@ -193,7 +193,62 @@ public class PenjualanController {
         }
     }
     
-     
+     public List<String[]> Cari(String searchNoFaktur) {
+    List<String[]> dataPenjualan = new ArrayList<>();
+
+    try {
+        // Modify the query to include a WHERE clause for NoFaktur if provided
+        String query = "SELECT * FROM tblpenjualan";
+        if (searchNoFaktur != null && !searchNoFaktur.isEmpty()) {
+            query += " WHERE NoFaktur = ?";
+        }
+
+        String queryDetail = "SELECT a.NoFaktur AS noFaktur, GROUP_CONCAT(b.NamaBarang) AS namaBarang " +
+                             "FROM tbldetailpenjualan AS a " +
+                             "JOIN tblbarang AS b ON b.KodeBarang = a.KodeBarang " +
+                             "WHERE a.NoFaktur = ? " +
+                             "GROUP BY a.NoFaktur";
+
+        try (PreparedStatement ps = cn.prepareStatement(query)) {
+            // Set the searchNoFaktur parameter if provided
+            if (searchNoFaktur != null && !searchNoFaktur.isEmpty()) {
+                ps.setString(1, searchNoFaktur);
+            }
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    String noFaktur = rs.getString("NoFaktur");
+
+                    // Mengambil data barang pada tbl detail penjualan
+                    List<String> detail = new ArrayList<>();
+                    try (PreparedStatement psd = cn.prepareStatement(queryDetail)) {
+                        psd.setString(1, noFaktur);
+                        try (ResultSet rsd = psd.executeQuery()) {
+                            if (rsd.next()) {
+                                String namaBarang = rsd.getString("namaBarang");
+                                detail.add(namaBarang);
+                            }
+                        }
+                    }
+
+                    String tglPenjualan = rs.getString("TglPenjualan");
+                    String idPetugas = rs.getString("IDPetugas");
+                    String bayar = rs.getString("Bayar");
+                    String sisa = rs.getString("Sisa");
+                    String total = rs.getString("Total");
+
+                    String[] data = {noFaktur, String.join(", ", detail), tglPenjualan, idPetugas, bayar, sisa, total};
+                    dataPenjualan.add(data);
+                }
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return dataPenjualan;
+}
+
 
     }
     
