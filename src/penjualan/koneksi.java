@@ -8,7 +8,7 @@ public class koneksi {
     public static Connection getKoneksi(){
         if(conn==null){
             try{
-            String url = "jdbc:mysql://localhost:3306/db_penjualan_barang_pas";
+            String url = "jdbc:mysql://localhost:3306/db_penjualan_barang_pas_xiib";
             String user = "root";
             String pass = "";
             DriverManager.registerDriver(new com.mysql.cj.jdbc.Driver());
