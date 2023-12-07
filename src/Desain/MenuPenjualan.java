@@ -14,8 +14,6 @@ import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import java.util.Date;
-import java.text.SimpleDateFormat;
 import penjualan.koneksi;
 /**
  *
@@ -30,12 +28,10 @@ public class MenuPenjualan extends javax.swing.JPanel {
     private final DefaultTableModel view = new DefaultTableModel();
     private final DefaultTableModel view2 = new DefaultTableModel();
     private List<String[]> detail = new ArrayList<>();
-    private static Connection conn;
     public MenuPenjualan() {
         initComponents();
         loadData();
         loadDetail();
-        conn=koneksi.getKoneksi();
         try {
             TampilId();
         } catch (SQLException ex) {
@@ -250,6 +246,11 @@ public class MenuPenjualan extends javax.swing.JPanel {
         jPanel8.add(jLabel45, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 6, -1, -1));
 
         jButton26.setText("Clear");
+        jButton26.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton26ActionPerformed(evt);
+            }
+        });
         jPanel8.add(jButton26, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 530, 87, 32));
 
         btn_cancel.setText("Cancel");
@@ -621,11 +622,14 @@ public class MenuPenjualan extends javax.swing.JPanel {
                         PanelMain.add(pn_main);
                         PanelMain.repaint();
                         PanelMain.revalidate();
+                        Clear();
                     }
 
                 } catch (NumberFormatException e) {
                     JOptionPane.showMessageDialog(null, "Masukkan angka yang valid untuk bayar dan sisa");
                     e.printStackTrace(); // Print the exception details for debugging
+                }finally{
+                  Clear();
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "Masukkan nilai untuk bayar dan sisa");
@@ -683,6 +687,10 @@ public class MenuPenjualan extends javax.swing.JPanel {
     private void totalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_totalActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_totalActionPerformed
+
+    private void jButton26ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton26ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton26ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -826,69 +834,82 @@ public class MenuPenjualan extends javax.swing.JPanel {
     }
     }
     
-    private void TampilId() throws SQLException {
-        Date sk = new Date();
+    public void TampilId() throws SQLException {
+        java.util.Date sk = new java.util.Date();
+
         SimpleDateFormat format1 = new SimpleDateFormat("yyMMdd");
         String time = format1.format(sk);
-
-        String sql = "SELECT MAX(CAST(SUBSTRING(NoFaktur, 7) AS UNSIGNED)) AS max_kode FROM tblpenjualan";
+        String sql = "SELECT RIGHT(NoFaktur, 1) AS kd FROM tblpenjualan ORDER BY NoFaktur DESC LIMIT 1";
         koneksi.getKoneksi();
-
-        try (Statement cn = conn.createStatement(); ResultSet rs = cn.executeQuery(sql)) {
+        Connection kon = koneksi.getKoneksi();
+       Statement c = kon.createStatement(); 
+       ResultSet rs = c.executeQuery(sql);
             if (rs.next()) {
-                int maxKode = rs.getInt("max_kode");
-                int newKode = maxKode + 1;
-                noFaktur.setText(time + String.format("%03d", newKode)); 
+                int kode = Integer.parseInt(rs.getString("kd")) + 1;
+                noFaktur.setText(time + Integer.toString(kode));
             } else {
+                
                 int kode = 1;
-                noFaktur.setText(time + String.format("%03d", kode)); 
+                noFaktur.setText(time + Integer.toString(kode));
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
         } 
     
         private void cari(){
-            Connection conn = penjualan.koneksi.getKoneksi();
-            DefaultTableModel model = (DefaultTableModel) tblhasil.getModel();
-            model.setRowCount(0);
-            String cari = txtcari.getText();
+           Connection conn = penjualan.koneksi.getKoneksi();
+DefaultTableModel model = (DefaultTableModel) tblhasil.getModel();
+model.setRowCount(0);
+String cari = txtcari.getText();
 
-            try {
-                // Query dengan menggunakan parameter (?)
-                String sql = "SELECT A.NoFaktur, A.TglPenjualan, A.IDPetugas, A.Bayar, A.Sisa, A.Total, "
-                        + "B.KodeBarang, B.Jumlah, B.SubTotal, "
-                        + "GROUP_CONCAT(C.NamaBarang) AS namaBarang\n"
-                        + "FROM tblpenjualan A\n"
-                        + "JOIN tbldetailpenjualan B ON A.NoFaktur = B.NoFaktur\n"
-                        + "JOIN tblbarang C ON B.KodeBarang = C.KodeBarang\n"
-                        + "WHERE A.NoFaktur LIKE ?\n"
-                        + "GROUP BY A.NoFaktur, A.TglPenjualan, A.IDPetugas, A.Bayar, A.Sisa, A.Total, "
-                        + "B.KodeBarang, B.Jumlah, B.SubTotal;";
+try {
+    // Query dengan menggunakan parameter (?)
+    String sql = "SELECT A.NoFaktur, A.TglPenjualan, A.IDPetugas, A.Bayar, A.Sisa, A.Total, " +
+             "B.KodeBarang, B.Jumlah, B.SubTotal, " +
+             "GROUP_CONCAT(C.NamaBarang) AS namaBarang\n" +
+             "FROM tblpenjualan A\n" +
+             "JOIN tbldetailpenjualan B ON A.NoFaktur = B.NoFaktur\n" +
+             "JOIN tblbarang C ON B.KodeBarang = C.KodeBarang\n" +
+             "WHERE A.NoFaktur LIKE ?\n" +
+             "GROUP BY A.NoFaktur, A.TglPenjualan, A.IDPetugas, A.Bayar, A.Sisa, A.Total, " +
+             "B.KodeBarang, B.Jumlah, B.SubTotal;";
 
-                PreparedStatement st = conn.prepareStatement(sql);
-                st.setString(1, "%" + cari + "%");  // Mengatur parameter dengan nilai pencarian
-                ResultSet rs = st.executeQuery();
+                 
+    PreparedStatement st = conn.prepareStatement(sql);
+    st.setString(1, "%" + cari + "%");  // Mengatur parameter dengan nilai pencarian
+    ResultSet rs = st.executeQuery();
 
-                while (rs.next()) {
-                    // Mendapatkan nilai kolom dari hasil query
-                    String noFaktur = rs.getString("NoFaktur");
-                    String namaBarang = rs.getString("namaBarang"); // Menggunakan alias dari GROUP_CONCAT
-                    String tglPenjualan = rs.getString("TglPenjualan");
-                    String idPetugas = rs.getString("IDPetugas");
-                    String bayar = rs.getString("Bayar");
-                    String sisa = rs.getString("Sisa");
-                    String total = rs.getString("Total");
+    while (rs.next()) {
+        // Mendapatkan nilai kolom dari hasil query
+        String noFaktur = rs.getString("NoFaktur");
+        String namaBarang = rs.getString("namaBarang"); // Menggunakan alias dari GROUP_CONCAT
+        String tglPenjualan = rs.getString("TglPenjualan");
+        String idPetugas = rs.getString("IDPetugas");
+        String bayar = rs.getString("Bayar");
+        String sisa = rs.getString("Sisa");
+        String total = rs.getString("Total");
 
-                    // Menambahkan data ke dalam tabel
-                    Object[] rowData = {noFaktur, namaBarang, tglPenjualan, idPetugas, bayar, sisa, total};
-                    model.addRow(rowData);
-                }
-            } catch (SQLException e) {
-                // Menangani exception
-                Logger.getLogger(MenuAggota.class.getName()).log(Level.SEVERE, null, e);
-            }
+        // Menambahkan data ke dalam tabel
+        Object[] rowData = {noFaktur, namaBarang, tglPenjualan, idPetugas, bayar, sisa, total};
+        model.addRow(rowData);
+    }
+} catch (SQLException e) {
+    // Menangani exception
+    Logger.getLogger(MenuAggota.class.getName()).log(Level.SEVERE, null, e);
+}
 
+    }
+
+    private void Clear() {
+        kodePetugas.setSelectedIndex(0);
+       namaPetugas.setText("");
+       kodeBarang.setSelectedIndex(0);
+       namaBarang.setText("");
+       hargaJual.setText("");
+       stok.setText("");
+       jumlah.setText("");
+       subTotal.setText("0");
+       total.setText("0");
+       bayar.setText("");
+       sisa.setText("");
     }
     }
   

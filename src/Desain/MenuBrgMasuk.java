@@ -1,10 +1,12 @@
 
 package Desain;
+import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import Controllers.BarangMasukController;
 import java.util.List;
 import java.sql.*;
+import penjualan.koneksi;
 import java.util.ArrayList;
 import Controllers.BarangController;
 import Controllers.PetugasController;
@@ -33,7 +35,7 @@ public class MenuBrgMasuk extends javax.swing.JPanel {
          loadData();
         loadDetail();
         conn=koneksi.getKoneksi();
-        try {
+         try {
             TampilId();
         } catch (SQLException ex) {
             Logger.getLogger(MenuPenjualan.class.getName()).log(Level.SEVERE, null, ex);
@@ -61,7 +63,7 @@ public class MenuBrgMasuk extends javax.swing.JPanel {
         btntambah = new javax.swing.JButton();
         btndelete = new javax.swing.JButton();
         btnBatal = new javax.swing.JButton();
-        txtcari = new javax.swing.JTextField();
+        jTextField1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         pn_add1 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
@@ -174,20 +176,16 @@ public class MenuBrgMasuk extends javax.swing.JPanel {
         btnBatal.setForeground(new java.awt.Color(255, 255, 255));
         btnBatal.setText("Batal");
 
-        txtcari.setFont(new java.awt.Font("SansSerif", 2, 12)); // NOI18N
-        txtcari.setForeground(new java.awt.Color(102, 102, 102));
-        txtcari.addActionListener(new java.awt.event.ActionListener() {
+        jTextField1.setFont(new java.awt.Font("SansSerif", 2, 12)); // NOI18N
+        jTextField1.setForeground(new java.awt.Color(102, 102, 102));
+        jTextField1.setText("Search");
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtcariActionPerformed(evt);
+                jTextField1ActionPerformed(evt);
             }
         });
 
         jButton1.setText("Cari NoNota");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
 
         javax.swing.GroupLayout pn_mainLayout = new javax.swing.GroupLayout(pn_main);
         pn_main.setLayout(pn_mainLayout);
@@ -213,11 +211,11 @@ public class MenuBrgMasuk extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(pn_mainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pn_mainLayout.createSequentialGroup()
-                                .addComponent(txtcari, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jButton1))
                             .addComponent(masterdata))))
-                .addContainerGap(62, Short.MAX_VALUE))
+                .addContainerGap(48, Short.MAX_VALUE))
         );
         pn_mainLayout.setVerticalGroup(
             pn_mainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -235,7 +233,7 @@ public class MenuBrgMasuk extends javax.swing.JPanel {
                         .addComponent(btndelete)
                         .addComponent(btnBatal))
                     .addGroup(pn_mainLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtcari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jButton1)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -499,9 +497,9 @@ public class MenuBrgMasuk extends javax.swing.JPanel {
         PanelMain.revalidate();            
     }//GEN-LAST:event_btntambahActionPerformed
 
-    private void txtcariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcariActionPerformed
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtcariActionPerformed
+    }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void btndeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndeleteActionPerformed
         // TODO add your handling code here:
@@ -674,11 +672,6 @@ public class MenuBrgMasuk extends javax.swing.JPanel {
        
     }//GEN-LAST:event_totalActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        cari();
-    }//GEN-LAST:event_jButton1ActionPerformed
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel PanelMain;
@@ -716,6 +709,7 @@ public class MenuBrgMasuk extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jumlah;
     private javax.swing.JComboBox<String> kodeBarang;
     private javax.swing.JComboBox<String> kodeDistributor;
@@ -734,7 +728,6 @@ public class MenuBrgMasuk extends javax.swing.JPanel {
     private javax.swing.JTextField tanggal;
     private javax.swing.JTable tblhasil;
     private javax.swing.JTextField total;
-    private javax.swing.JTextField txtcari;
     // End of variables declaration//GEN-END:variables
 
     private void showpanel() {
@@ -852,43 +845,6 @@ public class MenuBrgMasuk extends javax.swing.JPanel {
             e.printStackTrace();
         }
 }
-    private void cari() {
-        Connection conn = penjualan.koneksi.getKoneksi();
-        DefaultTableModel model = (DefaultTableModel) tblhasil.getModel();
-        model.setRowCount(0);
-        String cari = txtcari.getText();
-
-        try {
-            // Query dengan menggunakan parameter (?)
-            String sql = "SELECT a.NoNota, a.TglMasuk, c.NamaDistributor, b.NamaPetugas, a.Total " +
-                "FROM tblbrgmasuk AS a " +
-                "JOIN tblpetugas AS b ON b.IDPetugas = a.IDPetugas " +
-                "JOIN tbldistributor AS c ON c.IDDistributor = a.IDDistributor " +
-                "WHERE a.NoNota = ?";
-
-            PreparedStatement st = conn.prepareStatement(sql);
-            st.setString(1, "%" + cari + "%");  // Mengatur parameter dengan nilai pencarian
-            ResultSet rs = st.executeQuery();
-
-            while (rs.next()) {
-                // Mendapatkan nilai kolom dari hasil query
-                String noFaktur = rs.getString("NoNota");
-                String namaBarang = rs.getString("NamaBarang");
-                String tglPenjualan = rs.getString("TglMasuk");
-                String idPetugas = rs.getString("NamaDistributor");
-                String bayar = rs.getString("NamaPetugas");
-                String total = rs.getString("Total");
-
-                // Menambahkan data ke dalam tabel
-                Object[] rowData = {noFaktur, namaBarang, tglPenjualan, idPetugas, bayar, total};
-                model.addRow(rowData);
-            }
-        } catch (SQLException e) {
-            // Menangani exception
-            Logger.getLogger(MenuAggota.class.getName()).log(Level.SEVERE, null, e);
-        }
-
-    }
 }
 
 

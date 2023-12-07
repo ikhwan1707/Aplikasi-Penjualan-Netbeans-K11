@@ -42,7 +42,6 @@ public class MenuLaporan extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         btnBRG = new javax.swing.JButton();
-        txtNoFaktur = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
 
@@ -65,20 +64,13 @@ public class MenuLaporan extends javax.swing.JPanel {
         });
         jPanel1.add(btnBRG, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 180, 580, 60));
 
-        txtNoFaktur.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNoFakturActionPerformed(evt);
-            }
-        });
-        jPanel1.add(txtNoFaktur, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 430, 410, 40));
-
         jButton3.setText("Cari NoFaktur ");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 430, 210, 40));
+        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 420, 580, 60));
 
         jButton4.setText("LAPORAN PENJUALAN");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -110,7 +102,7 @@ public class MenuLaporan extends javax.swing.JPanel {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         String jdbc = "com.mysql.cj.jdbc.Driver";
-        String url = "jdbc:mysql://localhost:3306/db_penjualan_barang_pas";
+        String url = "jdbc:mysql://localhost:3306/db_penjualan_barang_pas_xiib";
         String user = "root";
         String pass = "";
         String dirr = "";
@@ -138,7 +130,7 @@ public class MenuLaporan extends javax.swing.JPanel {
     private void btnBRGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBRGActionPerformed
         // TODO add your handling code here:
         String jdbc = "com.mysql.cj.jdbc.Driver";
-        String url = "jdbc:mysql://localhost:3306/db_penjualan_barang_pas";
+        String url = "jdbc:mysql://localhost:3306/db_penjualan_barang_pas_xiib";
         String user = "root";
         String pass = "";
         String dirr = "";
@@ -149,11 +141,26 @@ public class MenuLaporan extends javax.swing.JPanel {
             Class.forName(jdbc);
             Connection conn = DriverManager.getConnection(url, user, pass);
             Statement st = conn.createStatement();
-            String sql = "SELECT * FROM tblbrgmasuk A\n"
-                    + "INNER JOIN tbldetailbarangmasuk B\n"
-                    + "ON A.NoNota = B.NoNota;;";
+            String sql = "SELECT\n"
+                    + "    BM.NoNota,\n"
+                    + "    BM.TglMasuk,\n"
+                    + "    BM.IDDistributor,\n"
+                    + "    D.NamaDistributor,\n"
+                    + "    BM.IDPetugas,\n"
+                    + "    P.NamaPetugas,\n"
+                    + "    BM.Total,\n"
+                    + "    DBM.KodeBarang,\n"
+                    + "    DBM.Jumlah,\n"
+                    + "    DBM.Subtotal,\n"
+                    + "    B.NamaBarang\n"
+                    + "FROM\n"
+                    + "    tblbrgmasuk BM\n"
+                    + "JOIN tbldetailbrgmasuk DBM ON BM.NoNota = DBM.NoNota\n"
+                    + "JOIN tbldistributor D ON BM.IDDistributor = D.IDDistributor\n"
+                    + "JOIN tblpetugas P ON BM.IDPetugas = P.IDPetugas\n"
+                    + "JOIN tblbarang B ON DBM.KodeBarang = B.KodeBarang;;";
             dirr = reportFile.getCanonicalPath() + "/src/Report/data/";
-            JasperDesign design = JRXmlLoader.load(dirr + "LaporBrgMasuk.jrxml");
+            JasperDesign design = JRXmlLoader.load(dirr + "LaporBarangMasuk.jrxml");
             JasperReport jr = JasperCompileManager.compileReport(design);
             ResultSet rs = st.executeQuery(sql);
             JRResultSetDataSource rsDataSource = new JRResultSetDataSource(rs);
@@ -165,34 +172,99 @@ public class MenuLaporan extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnBRGActionPerformed
 
-    private void txtNoFakturActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNoFakturActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNoFakturActionPerformed
-
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-      String jdbc = "com.mysql.cj.jdbc.Driver";
-        String url = "jdbc:mysql://localhost:3306/db_penjualan_barang_pas";
+       String jdbc = "com.mysql.cj.jdbc.Driver";
+        String url = "jdbc:mysql://localhost:3306/db_penjualan_barang_pas_xiib";
         String user = "root";
         String pass = "";
 
         try {
             Class.forName(jdbc);
             Connection conn = DriverManager.getConnection(url, user, pass);
-            String noFaktur = txtNoFaktur.getText();
-            String report = "src/Report/data/LaporPenjualan.jrxml";
-            HashMap<String, Object> parameters = new HashMap<>();
-            parameters.put("NoFaktur", noFaktur);
-            JasperReport jasperReport = JasperCompileManager.compileReport(report);
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, conn);
-            JasperViewer.viewReport(jasperPrint, false);
+
+            // Mengambil NoFaktur dari masukan pengguna atau sumber lainnya
+            String noFaktur = JOptionPane.showInputDialog("Masukkan NoFaktur:");
+
+            // Memeriksa apakah pengguna tidak membatalkan masukan
+            if (noFaktur != null && !noFaktur.isEmpty()) {
+                // Jika NoFaktur diinput, melanjutkan dengan menghasilkan laporan
+                String report = "src/Report/data/LaporPenjualan.jrxml";
+                String sql = "SELECT A.NoFaktur, A.TglPenjualan, A.IDPetugas, A.Bayar, A.Sisa, A.Total, " +
+                        "B.NoFaktur AS B_NoFaktur, B.KodeBarang, B.Jumlah, B.SubTotal, " +
+                        "C.KodeBarang AS C_KodeBarang, C.NamaBarang, C.HargaJual, C.Stok, " +
+                        "D.NamaPetugas " +
+                        "FROM tbldetailpenjualan B " +
+                        "LEFT JOIN tblpenjualan A ON B.NoFaktur = A.NoFaktur " +
+                        "LEFT JOIN tblbarang C ON B.KodeBarang = C.KodeBarang " +
+                        "LEFT JOIN tblpetugas D ON A.IDPetugas = D.IDPetugas " +
+                        "WHERE A.NoFaktur = ?";
+
+                // Menggunakan PreparedStatement untuk mencegah SQL injection
+                try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                    pstmt.setString(1, noFaktur);  // Mengatur nilai parameter
+                    ResultSet rs = pstmt.executeQuery();
+
+                    if (rs.next()) {
+                        // Jika ada data yang cocok, lanjutkan dengan membuat laporan
+                        HashMap<String, Object> parameters = new HashMap<>();
+                        parameters.put("NoFaktur", noFaktur);
+                        JasperReport jasperReport = JasperCompileManager.compileReport(report);
+                        JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, parameters, conn);
+                        JasperViewer.viewReport(jasperPrint, false);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Data dengan NoFaktur tersebut tidak ditemukan.");
+                    }
+                }
+            } else {
+                // Jika pengguna membatalkan masukan, tampilkan pesan
+                JOptionPane.showMessageDialog(null, "Pemasukan NoFaktur dibatalkan atau NoFaktur kosong.");
+            }
+
+            // Menutup koneksi ke database
+            conn.close();
         } catch (Exception e) {
+            // Menangani exception dan menampilkan pesan kesalahan
             JOptionPane.showMessageDialog(null, "Gagal: " + e.getMessage());
         }
+        
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
+        String jdbc = "com.mysql.cj.jdbc.Driver";
+        String url = "jdbc:mysql://localhost:3306/db_penjualan_barang_pas_xiib";
+        String user = "root";
+        String pass = "";
+        String dirr = "";
+
+        File reportFile = new File(".");
+
+        try {
+            Class.forName(jdbc);
+            Connection conn = DriverManager.getConnection(url, user, pass);
+            Statement st = conn.createStatement();
+            String sql = "SELECT A.NoFaktur, A.TglPenjualan, A.IDPetugas, A.Bayar, A.Sisa, A.Total, \n"
+                    + "       B.NoFaktur AS B_NoFaktur, B.KodeBarang, B.Jumlah, B.SubTotal, \n"
+                    + "       C.KodeBarang AS C_KodeBarang, C.NamaBarang, C.HargaJual, C.Stok, \n"
+                    + "       D.NamaPetugas\n"
+                    + "FROM tbldetailpenjualan B\n"
+                    + "LEFT JOIN tblpenjualan A ON B.NoFaktur = A.NoFaktur\n"
+                    + "LEFT JOIN tblbarang C ON B.KodeBarang = C.KodeBarang\n"
+                    + "LEFT JOIN tblpetugas D ON A.IDPetugas = D.IDPetugas\n"
+                    + "WHERE A.NoFaktur = B.NoFaktur; \n"
+                    + "";
+            dirr = reportFile.getCanonicalPath() + "/src/Report/data/";
+            JasperDesign design = JRXmlLoader.load(dirr + "LaporPenjualan.jrxml");
+            JasperReport jr = JasperCompileManager.compileReport(design);
+            ResultSet rs = st.executeQuery(sql);
+            JRResultSetDataSource rsDataSource = new JRResultSetDataSource(rs);
+            JasperPrint jp = JasperFillManager.fillReport(jr, new HashMap<>(), rsDataSource);
+            JasperViewer.viewReport(jp, false);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Gagal: " + e.getMessage());
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_jButton4ActionPerformed
 
 
@@ -202,6 +274,5 @@ public class MenuLaporan extends javax.swing.JPanel {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField txtNoFaktur;
     // End of variables declaration//GEN-END:variables
 }

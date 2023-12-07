@@ -15,9 +15,7 @@ import javax.swing.JOptionPane;
  */
 public class MenuAggota extends javax.swing.JPanel {
 
-    private int halamanSaatIni = 1;
-    private int dataPerHalaman = 8;
-    private int totalpages;
+    
     
     private static Connection conn;
     public MenuAggota() {
@@ -44,6 +42,7 @@ public class MenuAggota extends javax.swing.JPanel {
 
         jLabel1 = new javax.swing.JLabel();
         gbt_jenkel = new javax.swing.ButtonGroup();
+        PanelMain = new javax.swing.JPanel();
         panelview = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -55,7 +54,6 @@ public class MenuAggota extends javax.swing.JPanel {
         btnbatal = new javax.swing.JButton();
         txtcari = new javax.swing.JTextField();
         btncari = new javax.swing.JButton();
-        PanelMain = new javax.swing.JPanel();
         PanelAdd = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
         masterdata1 = new javax.swing.JLabel();
@@ -75,6 +73,13 @@ public class MenuAggota extends javax.swing.JPanel {
         txtalamat = new javax.swing.JTextField();
 
         jLabel1.setText("jLabel1");
+
+        setPreferredSize(new java.awt.Dimension(1387, 768));
+        setLayout(new java.awt.CardLayout());
+
+        PanelMain.setBackground(new java.awt.Color(255, 255, 255));
+        PanelMain.setPreferredSize(new java.awt.Dimension(976, 708));
+        PanelMain.setLayout(new java.awt.CardLayout());
 
         panelview.setBackground(new java.awt.Color(255, 255, 255));
         panelview.setPreferredSize(new java.awt.Dimension(976, 708));
@@ -169,12 +174,7 @@ public class MenuAggota extends javax.swing.JPanel {
         });
         panelview.add(btncari, new org.netbeans.lib.awtextra.AbsoluteConstraints(970, 40, -1, 30));
 
-        setPreferredSize(new java.awt.Dimension(1387, 768));
-        setLayout(new java.awt.CardLayout());
-
-        PanelMain.setBackground(new java.awt.Color(255, 255, 255));
-        PanelMain.setPreferredSize(new java.awt.Dimension(976, 708));
-        PanelMain.setLayout(new java.awt.CardLayout());
+        PanelMain.add(panelview, "card2");
 
         PanelAdd.setBackground(new java.awt.Color(255, 255, 255));
         PanelAdd.setPreferredSize(new java.awt.Dimension(976, 708));

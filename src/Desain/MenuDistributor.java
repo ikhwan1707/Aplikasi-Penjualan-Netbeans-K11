@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import javax.swing.table.DefaultTableModel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.awt.event.KeyEvent;
 import java.util.Date;
 import javax.swing.JOptionPane;
 /**
@@ -318,6 +319,11 @@ public class MenuDistributor extends javax.swing.JPanel {
                 txtteleponActionPerformed(evt);
             }
         });
+        txttelepon.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtteleponKeyTyped(evt);
+            }
+        });
 
         jLabel9.setText("Telepon");
 
@@ -524,6 +530,21 @@ public class MenuDistributor extends javax.swing.JPanel {
         // TODO add your handling code here:
         cari();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void txtteleponKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtteleponKeyTyped
+        // TODO add your handling code here:
+        char c = evt.getKeyChar();
+
+        if (!(Character.isDigit(c) || c == KeyEvent.VK_BACK_SPACE || c == KeyEvent.VK_DELETE)) {
+            getToolkit().beep();
+            evt.consume();
+            JOptionPane.showMessageDialog(null, "Hanya input karakter non-angka yang diperbolehkan", "Error", JOptionPane.ERROR_MESSAGE);
+        } else if (txttelepon.getText().length() >= 15) {
+            getToolkit().beep();
+            evt.consume();
+            JOptionPane.showMessageDialog(null, "Hanya input angka dengan maksimal 15 digit yang diperbolehkan", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_txtteleponKeyTyped
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
