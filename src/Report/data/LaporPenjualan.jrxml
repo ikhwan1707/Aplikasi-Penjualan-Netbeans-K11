@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="de7d96db-47ec-406a-a5a3-15865a51441b">
-	<property name="ireport.zoom" value="1.6105100000000037"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="d5f2b006-0881-4339-ba1f-79e85e98ed89">
+	<property name="ireport.zoom" value="1.7715610000000017"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="NoFaktur" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT A.NoFaktur, A.TglPenjualan, A.IDPetugas, A.Bayar, A.Sisa, A.Total, 
-       B.NoFaktur AS B_NoFaktur, B.KodeBarang, B.Jumlah, B.SubTotal, 
-       C.KodeBarang AS C_KodeBarang, C.NamaBarang, C.HargaJual, C.Stok, 
+       B.NoFaktur AS NoFaktur, B.KodeBarang, B.Jumlah, B.SubTotal, 
+       C.KodeBarang AS KodeBarang, C.NamaBarang, 
        D.NamaPetugas
 FROM tbldetailpenjualan B
 LEFT JOIN tblpenjualan A ON B.NoFaktur = A.NoFaktur
 LEFT JOIN tblbarang C ON B.KodeBarang = C.KodeBarang
 LEFT JOIN tblpetugas D ON A.IDPetugas = D.IDPetugas
-WHERE A.NoFaktur = $P{NoFaktur};
-]]>
+WHERE A.NoFaktur = $P{NoFaktur};]]>
 	</queryString>
 	<field name="NoFaktur" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -22,20 +21,19 @@ WHERE A.NoFaktur = $P{NoFaktur};
 	<field name="TglPenjualan" class="java.sql.Date">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="IDPetugas" class="java.lang.String">
+	<field name="IDPetugas" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="Bayar" class="java.lang.String">
+	<field name="Bayar" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="Sisa" class="java.lang.String">
+	<field name="Sisa" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="Total" class="java.lang.String">
+	<field name="Total" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="B_NoFaktur" class="java.lang.String"/>
-	<field name="KodeBarang" class="java.lang.String">
+	<field name="KodeBarang" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="Jumlah" class="java.lang.Integer">
@@ -44,14 +42,7 @@ WHERE A.NoFaktur = $P{NoFaktur};
 	<field name="SubTotal" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="C_KodeBarang" class="java.lang.Integer"/>
 	<field name="NamaBarang" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="HargaJual" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="Stok" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="NamaPetugas" class="java.lang.String">
@@ -62,10 +53,18 @@ WHERE A.NoFaktur = $P{NoFaktur};
 	</background>
 	<title>
 		<band height="79" splitType="Stretch">
+			<textField>
+				<reportElement x="466" y="59" width="89" height="20" uuid="cc1340f8-c8a0-4804-bb76-dbba384ec01e"/>
+				<textFieldExpression><![CDATA[$F{TglPenjualan}]]></textFieldExpression>
+			</textField>
 			<staticText>
-				<reportElement x="125" y="28" width="296" height="32" uuid="807d58f1-36fe-4576-bb0a-88bad03cc718"/>
+				<reportElement x="466" y="39" width="86" height="20" uuid="c48c2165-b840-4e97-9673-b81e0a62d082"/>
+				<text><![CDATA[TanggalPenjualan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="149" y="9" width="262" height="50" uuid="6bdaf2bb-7bdb-4117-beec-eb4153aa904f"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="24"/>
+					<font size="20"/>
 				</textElement>
 				<text><![CDATA[LAPORAN PENJUALAN]]></text>
 			</staticText>
@@ -77,7 +76,7 @@ WHERE A.NoFaktur = $P{NoFaktur};
 	<columnHeader>
 		<band height="61" splitType="Stretch">
 			<staticText>
-				<reportElement x="238" y="41" width="37" height="20" uuid="3a32a5d4-b49d-4d83-9689-c91848d0fe37"/>
+				<reportElement x="302" y="41" width="46" height="20" uuid="3a4eb8d3-7e42-4a2b-b220-a26d64bcb859"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -86,10 +85,10 @@ WHERE A.NoFaktur = $P{NoFaktur};
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[Bayar]]></text>
+				<text><![CDATA[SubTotal]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="114" y="41" width="50" height="20" uuid="2b1938c6-9cf9-4200-bd38-4148ad64b3aa"/>
+				<reportElement x="118" y="41" width="73" height="20" uuid="f17309d0-1532-46d8-a183-766478813405"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -98,10 +97,10 @@ WHERE A.NoFaktur = $P{NoFaktur};
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[IDPetugas]]></text>
+				<text><![CDATA[NamaPetugas]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="275" y="41" width="37" height="20" uuid="2c8a50f7-641b-4363-96ca-9029b4353ae2"/>
+				<reportElement x="394" y="41" width="46" height="20" uuid="02a2aab9-6c57-4693-8d4f-e77e85837cf5"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -113,31 +112,7 @@ WHERE A.NoFaktur = $P{NoFaktur};
 				<text><![CDATA[Sisa]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="312" y="41" width="37" height="20" uuid="faca2b3b-6ce0-4565-9533-ff0c418483e9"/>
-				<box>
-					<pen lineWidth="0.5"/>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[Total]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="53" y="41" width="61" height="20" uuid="ee083a91-5320-49d0-a7de-00f80ea33b20"/>
-				<box>
-					<pen lineWidth="0.5"/>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[TglPenjualan]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="3" y="41" width="50" height="20" uuid="5da56452-20f5-4d43-bcf9-f06100b81013"/>
+				<reportElement x="72" y="41" width="46" height="20" uuid="baf79b69-05bc-4bca-bc93-0b6554186681"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -149,31 +124,7 @@ WHERE A.NoFaktur = $P{NoFaktur};
 				<text><![CDATA[NoFaktur]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="349" y="41" width="61" height="20" uuid="59285ce4-3917-4519-89e8-7ca6f5e6c719"/>
-				<box>
-					<pen lineWidth="0.5"/>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[KodeBarang]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="521" y="41" width="37" height="20" uuid="70b92827-0c90-4355-ac0f-12b3671341aa"/>
-				<box>
-					<pen lineWidth="0.5"/>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[Jumlah]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="410" y="41" width="61" height="20" uuid="b1068730-1162-4a44-97ce-5c9c44f88556"/>
+				<reportElement x="191" y="41" width="65" height="20" uuid="2beaaa59-8446-4763-9354-3c234e8f698c"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -185,7 +136,7 @@ WHERE A.NoFaktur = $P{NoFaktur};
 				<text><![CDATA[NamaBarang]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="471" y="41" width="50" height="20" uuid="126b3be2-1d35-49ea-b52c-30c11525a833"/>
+				<reportElement x="256" y="41" width="46" height="20" uuid="1e250ad5-b608-482b-aaca-11487392e181"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -194,10 +145,10 @@ WHERE A.NoFaktur = $P{NoFaktur};
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[HargaJual]]></text>
+				<text><![CDATA[Jumlah]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="164" y="41" width="74" height="20" uuid="8e720c98-7785-45b4-a7e7-a99a522643e6"/>
+				<reportElement x="440" y="41" width="46" height="20" uuid="b588f979-7330-4f27-ab0b-0e6330c60050"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -206,14 +157,26 @@ WHERE A.NoFaktur = $P{NoFaktur};
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[NamaPetugas]]></text>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="348" y="41" width="46" height="20" uuid="763a77ae-abfd-4ffa-874a-dca98f30de90"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Bayar]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField>
-				<reportElement x="238" y="0" width="37" height="20" uuid="fb5a9181-e341-4d0d-9ce1-e4ab08eac2f6"/>
+				<reportElement x="302" y="0" width="46" height="20" uuid="dd28d1c4-8cad-4d94-9eb7-4241b2758b7e"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -222,10 +185,10 @@ WHERE A.NoFaktur = $P{NoFaktur};
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{Bayar}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{SubTotal}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="114" y="0" width="50" height="20" uuid="c4146bae-b3b6-461d-aead-1e21d68fe2be"/>
+				<reportElement x="118" y="0" width="73" height="20" uuid="57534796-84ea-4892-9b70-09f484fca702"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -234,10 +197,10 @@ WHERE A.NoFaktur = $P{NoFaktur};
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{IDPetugas}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{NamaPetugas}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="275" y="0" width="37" height="20" uuid="a5dc1b7a-0a14-4caf-8a54-9744990d7df5"/>
+				<reportElement x="394" y="0" width="46" height="20" uuid="29e6533e-ddb1-4c87-8b3e-fdfa3ee05809"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -249,31 +212,7 @@ WHERE A.NoFaktur = $P{NoFaktur};
 				<textFieldExpression><![CDATA[$F{Sisa}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="312" y="0" width="37" height="20" uuid="a9860a1a-341d-4b4e-b08f-4ec176df40ca"/>
-				<box>
-					<pen lineWidth="0.5"/>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{Total}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="53" y="0" width="61" height="20" uuid="ddfb9e1f-68c5-4c32-bfc6-a3351ab29781"/>
-				<box>
-					<pen lineWidth="0.5"/>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{TglPenjualan}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="3" y="0" width="50" height="20" uuid="ad455562-b906-4fce-8274-d34b7022be8c"/>
+				<reportElement x="72" y="0" width="46" height="20" uuid="4054d215-fec1-4ed1-91f9-485f5a45fa35"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -285,31 +224,7 @@ WHERE A.NoFaktur = $P{NoFaktur};
 				<textFieldExpression><![CDATA[$F{NoFaktur}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="349" y="0" width="61" height="20" uuid="504d1c3e-7d04-4197-94cc-ad068052acde"/>
-				<box>
-					<pen lineWidth="0.5"/>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{KodeBarang}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="521" y="0" width="34" height="20" uuid="b223d264-e85d-4c80-becd-b103087451dc"/>
-				<box>
-					<pen lineWidth="0.5"/>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{Jumlah}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="410" y="0" width="61" height="20" uuid="603c89fa-395c-43d4-aa15-794111bd3997"/>
+				<reportElement x="191" y="0" width="65" height="20" uuid="24150256-dd8d-4b42-8eeb-aa893d7ff342"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -321,7 +236,7 @@ WHERE A.NoFaktur = $P{NoFaktur};
 				<textFieldExpression><![CDATA[$F{NamaBarang}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="471" y="0" width="50" height="20" uuid="61a2d04a-9ee0-4f78-ad80-0702c65da656"/>
+				<reportElement x="256" y="0" width="46" height="20" uuid="2214eb44-ac23-48a4-a0df-acbd567a9f62"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -330,10 +245,10 @@ WHERE A.NoFaktur = $P{NoFaktur};
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{HargaJual}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{Jumlah}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="165" y="0" width="73" height="20" uuid="c722ad49-1cb9-4f68-bfdb-120d42ae58be"/>
+				<reportElement x="440" y="0" width="46" height="20" uuid="7aef51a9-0de6-4c64-8a63-245e6bf584c5"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -342,7 +257,19 @@ WHERE A.NoFaktur = $P{NoFaktur};
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{NamaPetugas}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{Total}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="348" y="0" width="46" height="20" uuid="46e876e2-9cbe-48ef-96f0-aa6b2f9c4064"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Bayar}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

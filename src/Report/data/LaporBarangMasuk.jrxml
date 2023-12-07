@@ -1,12 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="75b4bd4a-16f9-4baa-894b-cbc9be1da8d1">
-	<property name="ireport.zoom" value="1.6105100000000014"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="289f8adb-3644-477d-b5f3-ed95a9db8857">
+	<property name="ireport.zoom" value="1.7715610000000013"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<queryString language="SQL">
-		<![CDATA[SELECT * FROM tblbrgmasuk A
-INNER JOIN tbldetailbarangmasuk B
-ON A.NoNota = B.NoNota;]]>
+		<![CDATA[SELECT
+    BM.NoNota,
+    BM.TglMasuk,
+    BM.IDDistributor,
+    D.NamaDistributor,
+    BM.IDPetugas,
+    P.NamaPetugas,
+    BM.Total,
+    DBM.KodeBarang,
+    DBM.Jumlah,
+    DBM.Subtotal,
+    B.NamaBarang
+FROM
+    tblbrgmasuk BM
+JOIN tbldetailbrgmasuk DBM ON BM.NoNota = DBM.NoNota
+JOIN tbldistributor D ON BM.IDDistributor = D.IDDistributor
+JOIN tblpetugas P ON BM.IDPetugas = P.IDPetugas
+JOIN tblbarang B ON DBM.KodeBarang = B.KodeBarang;]]>
 	</queryString>
 	<field name="NoNota" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -14,36 +29,50 @@ ON A.NoNota = B.NoNota;]]>
 	<field name="TglMasuk" class="java.sql.Date">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="IDDistributor" class="java.lang.String">
+	<field name="IDDistributor" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="IDPetugas" class="java.lang.String">
+	<field name="NamaDistributor" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="Total" class="java.lang.String">
+	<field name="IDPetugas" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="KodeBarang" class="java.lang.String">
+	<field name="NamaPetugas" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Total" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="KodeBarang" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="Jumlah" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="SubTotal" class="java.lang.Integer">
+	<field name="Subtotal" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<variable name="NoNota_1" class="java.lang.Integer" resetType="Column" calculation="Sum">
-		<variableExpression><![CDATA[$F{NoNota}]]></variableExpression>
-	</variable>
+	<field name="NamaBarang" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
 		<band height="79" splitType="Stretch">
 			<staticText>
-				<reportElement x="153" y="15" width="256" height="50" uuid="0580d8d7-8079-4f7c-8cad-63e08f9eb8a2"/>
+				<reportElement x="483" y="35" width="69" height="20" uuid="74986bdf-1962-4087-a2f0-acf4a6c0887c"/>
+				<text><![CDATA[TglMasuk]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="483" y="55" width="69" height="20" uuid="9f64a60e-8b09-49db-8db2-7b092e4d82a1"/>
+				<textFieldExpression><![CDATA[$F{TglMasuk}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="169" y="15" width="251" height="60" uuid="01dbc2e4-1de6-4051-8a62-4f73df817ca2"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font size="24"/>
+					<font size="18"/>
 				</textElement>
 				<text><![CDATA[LAPORAN BARANG MASUK]]></text>
 			</staticText>
@@ -55,7 +84,7 @@ ON A.NoNota = B.NoNota;]]>
 	<columnHeader>
 		<band height="61" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="41" width="69" height="20" uuid="0d32f392-6a72-4a5d-8b25-4da8fff67d53"/>
+				<reportElement x="42" y="41" width="69" height="20" uuid="111b9864-161e-4099-a6cc-7866213f9131"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -67,43 +96,7 @@ ON A.NoNota = B.NoNota;]]>
 				<text><![CDATA[NoNota]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="69" y="41" width="69" height="20" uuid="f8f1b190-6f59-44ef-81f9-e2d4ab57fc83"/>
-				<box>
-					<pen lineWidth="0.5"/>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[TglMasuk]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="138" y="41" width="69" height="20" uuid="db8f5e60-1413-4f9d-9b85-322999fe9b7d"/>
-				<box>
-					<pen lineWidth="0.5"/>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[IDDistributor]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="207" y="41" width="69" height="20" uuid="3f9b019a-8964-420d-8496-b1b571da8b93"/>
-				<box>
-					<pen lineWidth="0.5"/>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[IDPetugas]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="276" y="41" width="69" height="20" uuid="beee4900-d978-423c-a8a2-c9454b662a8c"/>
+				<reportElement x="462" y="41" width="69" height="20" uuid="4a42a1a5-21b2-4691-b5fb-6acca4ab6d08"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -115,7 +108,7 @@ ON A.NoNota = B.NoNota;]]>
 				<text><![CDATA[Total]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="345" y="41" width="69" height="20" uuid="bff97662-17cd-4401-b0fa-1803b7e8ede9"/>
+				<reportElement x="186" y="41" width="69" height="20" uuid="f05940f5-afd4-44a1-8795-3c786f51395e"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -124,10 +117,22 @@ ON A.NoNota = B.NoNota;]]>
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[KodeBarang]]></text>
+				<text><![CDATA[NamaPetugas]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="414" y="41" width="69" height="20" uuid="8373200e-040e-4ec6-912a-35f4656c5940"/>
+				<reportElement x="111" y="41" width="75" height="20" uuid="88006480-ef42-4e29-a163-f2a3a9a6288e"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[NamaDistributor]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="324" y="41" width="69" height="20" uuid="d4e8df88-38b8-47ae-a0c8-37eb5d18fb34"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -139,7 +144,7 @@ ON A.NoNota = B.NoNota;]]>
 				<text><![CDATA[Jumlah]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="483" y="41" width="69" height="20" uuid="8dad2ff4-9fb1-4b86-b515-5d9ca7b1d3c0"/>
+				<reportElement x="393" y="41" width="69" height="20" uuid="47928704-9153-42f9-98c0-c207dfbe704f"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -148,14 +153,38 @@ ON A.NoNota = B.NoNota;]]>
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<text><![CDATA[SubTotal]]></text>
+				<text><![CDATA[Subtotal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="255" y="41" width="69" height="20" uuid="d6276fa9-237d-4a5a-8744-16217cbaf94b"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[NamaBarang]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="11" y="41" width="31" height="20" uuid="4f112ad8-c3a6-4916-b2d5-0683907a0034"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[No]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="69" height="20" uuid="7cc0a5b3-2c57-4597-8392-36cb2beb4f62"/>
+				<reportElement x="42" y="0" width="69" height="20" uuid="feacab56-605d-41a9-beca-15681da1e3d5"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -167,43 +196,7 @@ ON A.NoNota = B.NoNota;]]>
 				<textFieldExpression><![CDATA[$F{NoNota}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="69" y="0" width="69" height="20" uuid="0fcbb1ec-e10b-4974-af63-8f0752ab5bb0"/>
-				<box>
-					<pen lineWidth="0.5"/>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{TglMasuk}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="138" y="0" width="69" height="20" uuid="6b463562-964a-4968-8dd9-dc741a4ebf4c"/>
-				<box>
-					<pen lineWidth="0.5"/>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{IDDistributor}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="207" y="0" width="69" height="20" uuid="66c5bc7d-70a5-48a6-ab4e-99b0443e5c0c"/>
-				<box>
-					<pen lineWidth="0.5"/>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{IDPetugas}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="276" y="0" width="69" height="20" uuid="8ec17024-c0ed-489d-8201-0f7ac38be99c"/>
+				<reportElement x="462" y="0" width="69" height="20" uuid="4095abfa-7ada-4bbd-b5b1-5283323c618c"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -215,7 +208,7 @@ ON A.NoNota = B.NoNota;]]>
 				<textFieldExpression><![CDATA[$F{Total}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="345" y="0" width="69" height="20" uuid="b8e34d29-59df-4550-b4ac-89600fc2519a"/>
+				<reportElement x="186" y="0" width="69" height="20" uuid="424e3133-0ad2-4a31-b6a4-29a9a29acca4"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -224,10 +217,22 @@ ON A.NoNota = B.NoNota;]]>
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{KodeBarang}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{NamaPetugas}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="414" y="0" width="69" height="20" uuid="4290477f-6188-42c7-9ede-731c507f5de2"/>
+				<reportElement x="111" y="0" width="75" height="20" uuid="d34ea8dc-a968-45d2-8cdb-7e9d9b40f54f"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{NamaDistributor}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="324" y="0" width="69" height="20" uuid="cab659e0-c0f1-4bc7-bcab-52e9ba94bb7a"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -239,7 +244,7 @@ ON A.NoNota = B.NoNota;]]>
 				<textFieldExpression><![CDATA[$F{Jumlah}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="483" y="0" width="69" height="20" uuid="690b891f-3ef6-4c29-8844-52b945fb6861"/>
+				<reportElement x="393" y="0" width="69" height="20" uuid="61ced112-2947-45bd-9f1a-50da13d416dc"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -248,7 +253,31 @@ ON A.NoNota = B.NoNota;]]>
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{SubTotal}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{Subtotal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="255" y="0" width="69" height="20" uuid="f4d7972b-77c3-4c0b-872c-acb10d72d645"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{NamaBarang}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="11" y="0" width="31" height="20" uuid="29db2722-ea0c-4cb1-8d6f-e1db0222e4b8"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
